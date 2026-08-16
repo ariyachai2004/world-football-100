@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f7f3">
+<title>MONOPOLY FIFA WORLD CUP 2026</title>
+<style>
+:root{
+ --bg:#f5f7f3;--paper:#ffffff;--paper2:#fbfcfa;--ink:#111111;--line:#d9ddd7;
+ --sage:#657b69;--sage2:#edf3ed;--gold:#c4a25a;--shadow:0 14px 40px rgba(35,46,37,.08);
+ --danger:#985c5c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:linear-gradient(145deg,#fafbf8 0%,#f2f5f0 52%,#f8f7f2 100%);color:var(--ink)}
+body,button,input,select,textarea{font-family:"Sukhumvit Set","Thonburi",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body{font-weight:400}
+button,input,select,textarea{font-size:16px;color:var(--ink)}
+button{cursor:pointer}
+.hidden{display:none!important}
+.app{width:min(1180px,100%);margin:0 auto;padding:12px}
+.panel{background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.hero{max-width:900px;margin:3vh auto;padding:24px}
+.logo{margin:0 0 20px;line-height:.98;letter-spacing:-.02em}
+.logo .a{display:block;font-size:clamp(40px,8vw,64px);font-weight:600;letter-spacing:.035em}
+.logo .b{display:block;font-size:clamp(25px,5.5vw,42px);font-weight:500;margin-top:7px}
+.segment{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:5px;border:1px solid var(--line);background:#f0f2ef;border-radius:14px}
+.segment button{border:0;background:transparent;border-radius:10px;padding:10px 8px;font-weight:500}
+.segment button.on{background:#fff;outline:2px solid #111;outline-offset:-1px}
+.profileSetup{display:grid;gap:12px;margin-top:14px}
+.profileRow{display:grid;grid-template-columns:1.05fr 1.45fr .9fr;gap:10px}
+.box{background:var(--paper2);border:1px solid var(--line);border-radius:15px;padding:11px}
+.label{display:block;font-size:12px;font-weight:600;margin-bottom:7px;color:#111}
+.box input,.box select,.modal input,.modal select,.modal textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#fff;outline:none}
+.box input:focus,.box select:focus,.modal input:focus,.modal select:focus,.modal textarea:focus{border-color:#8c9a8e;box-shadow:0 0 0 3px rgba(101,123,105,.09)}
+.avatarChoices{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.avatarOpt{height:50px;border-radius:12px;border:1px solid var(--line);background:#fff;color:#4f6554;display:grid;place-items:center}
+.avatarOpt.on{outline:2px solid #111;outline-offset:1px;background:#f5f8f4}
+.avatarSvg{width:35px;height:35px;display:block}
+.tokenChoices{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.tokenOpt{height:44px;border:1px solid #aeb5af;border-radius:11px;position:relative}
+.tokenOpt.on{outline:3px solid #111;outline-offset:2px}
+.tokenOpt.used{opacity:.22;pointer-events:none}
+.tokenName{font-size:12px;margin-top:7px;color:#111}
+.twoCol{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.help{font-size:12px;line-height:1.55;margin:11px 0 0;color:#111}
+.rowBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.btn{border:0;border-radius:13px;padding:12px 17px;background:var(--sage);color:#fff;font-weight:600}
+.btn.secondary{background:#fff;color:#111;border:1px solid var(--line)}
+.btn.soft{background:var(--sage2);color:#111;border:1px solid var(--line)}
+.btn.danger{background:var(--danger)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.topbar .title{font-size:18px;font-weight:600}
+.topbar .tools{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;min-height:30px;padding:5px 9px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:12px}
+.draftLayout{display:grid;grid-template-columns:290px 1fr;gap:12px}
+.sticky{position:sticky;top:10px;height:max-content;padding:15px}
+.draftWho{font-size:28px;font-weight:600;margin:5px 0 10px}
+.teamMiniLine{display:flex;align-items:center;gap:7px;margin:7px 0;font-size:13px}
+.avatarFrame{width:42px;height:42px;border-radius:13px;border:3px solid #bbb;background:#fff;display:grid;place-items:center;color:#4f6554;box-shadow:0 6px 18px rgba(40,50,42,.07)}
+.avatarFrame .avatarSvg{width:27px;height:27px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:9px}
+.playerCard{border:1px solid var(--line);border-radius:16px;background:#fff;padding:12px;min-height:150px;box-shadow:0 6px 18px rgba(40,50,42,.04)}
+.playerCard.pick{cursor:pointer}
+.playerCard.pick:active{transform:scale(.99)}
+.playerCard .name{font-size:15px;font-weight:600;line-height:1.18}
+.playerCard .meta{font-size:11px;margin:5px 0 9px;color:#111;display:flex;align-items:center;gap:6px;flex-wrap:wrap}.flag{font-size:15px;line-height:1}
+.hiddenStats{font-size:11px;padding:8px;border-radius:9px;background:#f3f5f2;border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.stat{border:1px solid var(--line);background:#fafbf9;border-radius:9px;text-align:center;padding:5px 3px;font-size:9px}
+.stat b{display:block;font-size:16px;font-weight:600}
+.gameLayout{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:12px}
+.turnBox{padding:17px}
+.turnCaption{font-size:12px;font-weight:600}
+.turnName{display:flex;align-items:center;gap:9px;font-size:27px;font-weight:600;margin-top:6px}
+.boardNote{margin-top:10px;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:#f4f6f3;font-size:12px;line-height:1.5}
+.actionsGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.action{min-height:108px;border:1px solid var(--line);border-radius:17px;background:#fff;text-align:left;padding:13px;color:#111}
+.action:active{transform:scale(.99)}
+.action .tag{width:39px;height:29px;border:1px solid #cfd5cf;background:#eef2ed;border-radius:9px;display:grid;place-items:center;font-size:15px;font-weight:600;letter-spacing:0;line-height:1}
+.action b{display:block;margin-top:8px;font-size:16px;font-weight:600;line-height:1.25}
+.action small{display:block;margin-top:3px;font-size:11px;line-height:1.45;color:#111}
+.action.goWide{grid-column:1/-1;min-height:118px;background:#eef4ee}
+.side{display:grid;gap:10px}
+.side .panel{padding:14px}
+.sideTitle{font-weight:600}
+.scoreList{display:grid;gap:7px;margin-top:8px}
+.score{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:13px;background:#fbfcfa;padding:9px}
+.score.current{outline:2px solid #111;outline-offset:1px}
+.score .pts{font-size:20px;font-weight:600;color:#111}
+.small{font-size:11px;line-height:1.45;color:#111}
+.teamGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.miniCard{border:1px solid var(--line);border-radius:11px;background:#fff;padding:8px;min-height:77px;font-size:10px}
+.miniCard.off{opacity:.46;filter:grayscale(.6)}
+.miniCard b{display:block;font-size:11px;font-weight:600;line-height:1.15}
+.powerRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.powerBtn{padding:7px 8px;border-radius:9px;border:1px solid var(--line);background:#edf2ed;font-size:10px}
+.log{font-size:11px;max-height:230px;overflow:auto;margin-top:7px}
+.log div{padding:6px 0;border-bottom:1px solid #e5e8e4}
+.overlay{position:fixed;inset:0;z-index:2200}
+.modalBg{position:absolute;inset:0;background:rgba(25,31,27,.27);backdrop-filter:blur(7px);display:grid;place-items:center;padding:12px}
+.modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:21px;padding:18px;box-shadow:0 28px 80px rgba(30,40,33,.18)}
+.modal h2{font-size:22px;font-weight:600;margin:0 0 8px}
+.modal p{line-height:1.55}
+.modalBtns{display:flex;justify-content:flex-end;gap:7px;flex-wrap:wrap;margin-top:14px}
+.modalBtns button{border:0;border-radius:10px;padding:9px 12px;background:#e9eeea;color:#111;font-weight:600}
+.modalBtns button.primary{background:var(--sage);color:#fff}
+.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px;margin-top:10px}
+.choice{border:1px solid var(--line);border-radius:12px;background:#fff;text-align:left;padding:10px;color:#111}
+.choice b{display:block;font-weight:600;line-height:1.2}
+.choice small{display:block;margin-top:4px;font-size:11px;line-height:1.4}
+.matchChoice{border-left:8px solid var(--mc)}
+.notice{border:1px solid var(--line);border-radius:12px;background:#f3f6f2;padding:10px;margin:8px 0;line-height:1.5}
+.pass{position:absolute;inset:0;background:linear-gradient(145deg,#fafbf8,#edf2ed);display:grid;place-items:center;padding:20px;text-align:center}
+.passBox{width:min(500px,100%)}
+.passAvatar{width:92px;height:92px;border-radius:27px;border:4px solid #bbb;background:#fff;display:grid;place-items:center;margin:0 auto 12px;color:#4f6554}
+.passAvatar .avatarSvg{width:55px;height:55px}
+.passName{font-size:38px;font-weight:600;line-height:1.05}
+.dicePanel{border-radius:16px;padding:14px;border:1px solid var(--line);margin-top:9px}
+.dicePanel.white{background:#fff}
+.dicePanel.green{background:#edf6ee;border-color:#b9cbbb}
+.dicePanel.red{background:#faeeee;border-color:#dfbbbb}
+.diceTitle{font-size:16px;font-weight:600}
+.diceChoices{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:9px}
+.dieBtn{min-height:49px;border-radius:11px;border:1px solid #cfd5cf;background:#fff;font-size:17px;font-weight:600}
+.dieBtn.on{outline:3px solid #111;outline-offset:1px}
+.setGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.setBox{border:1px solid var(--line);border-left:7px solid var(--mc);border-radius:12px;background:#fff;padding:10px}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:8px;border-bottom:1px solid #e2e5e1;text-align:left;font-size:12px}
+.table th{font-weight:600}.table th:last-child,.table td:last-child{text-align:right}
+.globalUndo{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:3000;border:1px solid #cdd3ce;border-radius:999px;background:#fff;color:#111;padding:10px 14px;font-weight:600;box-shadow:0 8px 22px rgba(40,50,42,.12)}
+.globalUndo:disabled{opacity:.35}
+@media(max-width:980px){.gameLayout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.logPanel{grid-column:1/-1}}
+@media(max-width:700px){
+ .app{padding:8px}.hero{padding:19px;margin:1.5vh auto}
+ .profileRow{grid-template-columns:1fr}.twoCol{grid-template-columns:1fr}
+ .draftLayout{grid-template-columns:1fr}.sticky{position:static}
+ .cards{grid-template-columns:1fr 1fr}
+ .side{grid-template-columns:1fr}.setGrid{grid-template-columns:1fr}
+ .turnName{font-size:24px}.passName{font-size:34px}
+}
+
+/* PDF-inspired visual system */
+.flag{display:inline-flex;align-items:center;justify-content:center;min-width:20px}
+.flagEmoji{font-size:16px;line-height:1;display:inline-block}
+.englandFlag{display:inline-block;width:19px;height:13px;border:1px solid #d9d9d1;border-radius:2px;background:linear-gradient(to bottom,transparent 42%,#d94b42 42% 58%,transparent 58%),linear-gradient(to right,transparent 42%,#d94b42 42% 58%,transparent 58%),#fff;vertical-align:-2px}
+.action .tag svg{width:19px;height:19px;display:block}
+
+.historicModal{width:min(920px,100%);background:#fbf8ee;border:1px solid #c9d2bc;border-radius:26px;padding:0;overflow:hidden;box-shadow:0 30px 90px rgba(50,59,43,.24)}
+.historicHero{position:sticky;top:0;z-index:2;background:rgba(251,248,238,.97);backdrop-filter:blur(10px);padding:20px 20px 14px;border-bottom:1px dashed #cfd7c3}
+.historicHeroTop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.historicHero h2{font-size:25px;margin:0;color:#203b28;letter-spacing:-.02em}
+.historicHero p{margin:5px 0 0;font-size:12px;line-height:1.5;color:#38443a}
+.historicHeroMark{width:43px;height:43px;border:1px solid #b9c6a9;border-radius:14px;background:#f2f3df;color:#5f7957;display:grid;place-items:center;flex:0 0 auto}
+.historicHeroMark svg{width:23px;height:23px}
+.historicBody{padding:16px 18px 20px}
+.historicGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.historicCard{--mc:#94a889;position:relative;display:block;width:100%;overflow:hidden;text-align:left;border:1.5px solid #c4cfb5;border-radius:19px;background:linear-gradient(145deg,#fffdf6 0%,#faf8ed 100%);color:#162117;padding:0;box-shadow:0 7px 18px rgba(68,79,56,.07);transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
+button.historicCard:active{transform:scale(.992)}
+button.historicCard:hover{border-color:#9eaf8c;box-shadow:0 10px 24px rgba(68,79,56,.11)}
+.hcTop{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:42px;padding:0 10px 0 0}
+.hcYear{align-self:stretch;display:flex;align-items:center;padding:0 12px;background:var(--mc);color:#fff;font-size:14px;font-weight:700;border-bottom-right-radius:14px;letter-spacing:.02em}
+.hcStage{margin-left:auto;max-width:50%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:5px 8px;border:1px solid #cdd5c4;border-radius:999px;background:#f5f3e8;color:#42503e;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.hcCost{width:50px;height:46px;display:grid;place-items:center;align-content:center;border:1.5px solid #a8b995;border-radius:12px 12px 16px 16px;background:#eef2df;color:#31503a;line-height:1}
+.hcCost small{font-size:8px;font-weight:700;letter-spacing:.07em}
+.hcCost b{font-size:19px;margin-top:2px}
+.hcMatch{padding:13px 13px 11px}
+.hcTeams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;min-height:43px}
+.hcTeam{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;line-height:1.15;min-width:0}
+.hcTeam.right{justify-content:flex-end;text-align:right}
+.hcVs{font-size:10px;font-weight:700;color:#72806e;padding:4px 6px;border-radius:999px;background:#edf0e5}
+.hcMeta{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 13px 12px}
+.hcStat{border:1px solid #d8ddcd;border-radius:10px;background:rgba(255,255,255,.7);padding:7px 8px;min-width:0}
+.hcStat label{display:block;color:#687365;font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+.hcStat b{display:block;font-size:12px;font-weight:700;color:#1f3525;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hcOwner{margin:0 13px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #e0e3d5;padding-top:9px;font-size:10px;color:#39483a}
+.hcOwner strong{font-size:11px;color:#17351f}
+.hcSet{padding:4px 7px;border-radius:999px;background:#e8eedc;color:#4d6649;font-size:8px;font-weight:700;white-space:nowrap}
+.historicFooter{position:sticky;bottom:0;display:flex;justify-content:flex-end;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(to top,#fbf8ee 72%,rgba(251,248,238,0));z-index:2}
+.historicFooter button{border:1px solid #bfc8b5;background:#fffdf7;color:#172318;border-radius:12px;padding:10px 16px;font-weight:700}
+.historicSectionTitle{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin:5px 1px -2px;color:#31503a;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
+.historicSectionTitle:after{content:"";height:1px;background:#d5dbc9;flex:1}
+
+@media(max-width:640px){
+ .historicModal{border-radius:24px 24px 0 0;max-height:94vh;align-self:end}
+ .historicHero{padding:18px 16px 12px}.historicHero h2{font-size:23px}.historicHeroMark{width:39px;height:39px}
+ .historicBody{padding:12px 12px 18px}.historicGrid{grid-template-columns:1fr;gap:10px}
+ .hcTop{min-height:40px}.hcYear{font-size:14px}.hcStage{max-width:45%;font-size:8px}.hcCost{width:48px;height:44px}
+ .hcTeams{min-height:39px}.hcTeam{font-size:14px}.hcMeta{gap:5px}.hcStat{padding:6px 7px}
+ .historicFooter{padding-left:12px;padding-right:12px}
+}
+
+
+
+/* V8 - cute line profiles, fully scrollable Historic Match, persistent turn indicator */
+.avatarChoices{grid-template-columns:repeat(4,1fr);gap:8px}
+.avatarOpt{height:62px;border-radius:15px;background:#fff;color:#465b4b;transition:transform .12s ease,background .12s ease,box-shadow .12s ease}
+.avatarOpt:active{transform:scale(.97)}
+.avatarOpt.on{outline:2.5px solid #111;outline-offset:2px;background:#f8faf7;box-shadow:0 6px 16px rgba(45,58,48,.08)}
+.avatarOpt .avatarSvg{width:43px;height:43px}
+.avatarFrame{background:#fff;color:#465b4b}
+.avatarFrame .avatarSvg{width:30px;height:30px}
+.passAvatar .avatarSvg{width:59px;height:59px}
+
+/* The current player stays clearly visible while the page scrolls. */
+.turnDock{position:fixed;z-index:2050;top:calc(env(safe-area-inset-top) + 8px);left:50%;transform:translateX(-50%);width:min(520px,calc(100% - 18px));display:flex;align-items:center;gap:10px;padding:8px 12px 8px 9px;border:1px solid #cfd6cf;border-radius:18px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(31,43,35,.14)}
+.turnDockAvatar{width:42px;height:42px;flex:0 0 42px;border-radius:13px;border:3px solid #aaa;background:#fff;display:grid;place-items:center;color:#465b4b}
+.turnDockAvatar .avatarSvg{width:28px;height:28px}
+.turnDockText{min-width:0;flex:1;line-height:1.15}
+.turnDockLabel{font-size:10px;font-weight:600;color:#4a534c;margin-bottom:3px}
+.turnDockName{font-size:18px;font-weight:650;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.turnDockDot{width:12px;height:12px;border-radius:999px;border:1px solid rgba(0,0,0,.14);flex:0 0 12px}
+.turnDockSpacer{height:67px}
+
+/* Keep the in-page turn card attractive but no longer depend on it for identity. */
+.turnBox{position:relative;top:auto;z-index:1;padding:17px}
+
+/* Historic Match modal: header/footer fixed, only the card list scrolls. */
+.modalBg{overflow:hidden}
+.historicModal{width:min(920px,100%);height:min(900px,calc(100dvh - 24px));max-height:calc(100dvh - 24px);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.historicHero{position:relative;top:auto;flex:0 0 auto;z-index:3}
+.historicBody{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;padding:16px 18px 28px;scrollbar-gutter:stable}
+.historicGrid{align-content:start}
+.historicFooter{position:relative;bottom:auto;flex:0 0 auto;z-index:4;background:#fbf8ee;border-top:1px dashed #cfd7c3;padding:11px 18px calc(11px + env(safe-area-inset-bottom))}
+.historicFooter button{min-width:92px}
+
+/* Text remains comfortably inside every card. */
+.hcTeam span{min-width:0;overflow-wrap:anywhere;word-break:normal}
+.hcMeta{min-width:0}
+.hcStat{min-width:0}
+.hcStat b{overflow-wrap:anywhere;word-break:normal}
+
+/* End turn is intentionally plain: text only, no icon or subtitle. */
+.action.endTurnAction{min-height:86px;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff}
+.action.endTurnAction b{margin:0;font-size:17px}
+
+/* GO trophy gets slightly more visual emphasis. */
+.action.goWide .tag{background:#f6f0dd;border-color:#d9c89b;color:#816a34}
+.action.goWide .tag svg{width:22px;height:22px}
+
+@media(max-width:700px){
+ .turnDock{top:calc(env(safe-area-inset-top) + 6px);width:calc(100% - 16px);border-radius:17px}
+ .turnDockSpacer{height:65px}
+ .historicModal{width:100%;height:calc(100dvh - 8px);max-height:calc(100dvh - 8px);border-radius:24px 24px 0 0;align-self:end}
+ .historicHero{padding:16px 15px 12px}
+ .historicHero h2{font-size:22px}
+ .historicHero p{font-size:11px}
+ .historicBody{padding:11px 11px 22px}
+ .historicGrid{grid-template-columns:1fr;gap:10px}
+ .historicFooter{padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+}
+
+</style>
+</head>
+<body>
+<div id="app" class="app"></div>
+<button id="globalUndo" class="globalUndo hidden"></button>
+<div id="overlay" class="overlay hidden"></div>
+<script>
+"use strict";
+const T={"people2":"2 \u0e04\u0e19","people3":"3 \u0e04\u0e19","people4":"4 \u0e04\u0e19","playerName":"\u0e0a\u0e37\u0e48\u0e2d\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19","profile":"\u0e23\u0e39\u0e1b\u0e42\u0e1b\u0e23\u0e44\u0e1f\u0e25\u0e4c","tokenColor":"\u0e2a\u0e35\u0e2b\u0e21\u0e32\u0e01\u0e08\u0e23\u0e34\u0e07","silver":"\u0e2a\u0e35\u0e40\u0e07\u0e34\u0e19","gold":"\u0e2a\u0e35\u0e17\u0e2d\u0e07","red":"\u0e2a\u0e35\u0e41\u0e14\u0e07","blue":"\u0e2a\u0e35\u0e19\u0e49\u0e33\u0e40\u0e07\u0e34\u0e19","draftSet":"\u0e0a\u0e38\u0e14\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30\u0e2a\u0e33\u0e2b\u0e23\u0e31\u0e1a Draft","pool16":"16 \u0e43\u0e1a (\u0e43\u0e01\u0e25\u0e49\u0e40\u0e04\u0e35\u0e22\u0e07\u0e01\u0e31\u0e1a\u0e40\u0e01\u0e21\u0e08\u0e23\u0e34\u0e07)","pool100":"100 \u0e43\u0e1a","startPoints":"\u0e04\u0e30\u0e41\u0e19\u0e19\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19","startHelp":"\u0e04\u0e48\u0e32\u0e40\u0e23\u0e34\u0e48\u0e21\u0e15\u0e49\u0e19 20 Points = \u0e40\u0e2b\u0e23\u0e35\u0e22\u0e0d 1 \u0e08\u0e33\u0e19\u0e27\u0e19 5 \u0e40\u0e2b\u0e23\u0e35\u0e22\u0e0d, \u0e40\u0e2b\u0e23\u0e35\u0e22\u0e0d 5 \u0e08\u0e33\u0e19\u0e27\u0e19 3 \u0e40\u0e2b\u0e23\u0e35\u0e22\u0e0d","resume":"\u0e40\u0e25\u0e48\u0e19\u0e40\u0e01\u0e21\u0e17\u0e35\u0e48\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01\u0e44\u0e27\u0e49\u0e15\u0e48\u0e2d","draftTeam":"Draft \u0e17\u0e35\u0e21","newGame":"\u0e40\u0e23\u0e34\u0e48\u0e21\u0e43\u0e2b\u0e21\u0e48","pickTurn":"\u0e16\u0e36\u0e07\u0e04\u0e34\u0e27\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e02\u0e2d\u0e07","snakeHelp":"Snake Draft \u0e2a\u0e25\u0e31\u0e1a\u0e01\u0e31\u0e19\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30 \u0e40\u0e21\u0e37\u0e48\u0e2d\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30\u0e04\u0e23\u0e1a\u0e17\u0e35\u0e21\u0e41\u0e25\u0e49\u0e27 \u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19\u0e17\u0e35\u0e48\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e43\u0e1a\u0e17\u0e35\u0e48 4 \u0e40\u0e1b\u0e47\u0e19\u0e04\u0e19\u0e2a\u0e38\u0e14\u0e17\u0e49\u0e32\u0e22\u0e08\u0e30\u0e40\u0e23\u0e34\u0e48\u0e21\u0e40\u0e01\u0e21","statsHidden":"Stats \u0e16\u0e39\u0e01\u0e0b\u0e48\u0e2d\u0e19\u0e44\u0e27\u0e49\u0e08\u0e19\u0e01\u0e27\u0e48\u0e32\u0e08\u0e30\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30","currentPlayer":"\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19\u0e1b\u0e31\u0e08\u0e08\u0e38\u0e1a\u0e31\u0e19","moveHelp":"\u0e17\u0e2d\u0e22\u0e25\u0e39\u0e01\u0e40\u0e15\u0e4b\u0e32\u0e2a\u0e35\u0e02\u0e32\u0e27 \u0e40\u0e14\u0e34\u0e19\u0e2b\u0e21\u0e32\u0e01 \u0e41\u0e25\u0e49\u0e27\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e0a\u0e48\u0e2d\u0e07\u0e17\u0e35\u0e48\u0e15\u0e01","historicPreset":"Historic Match \u0e17\u0e31\u0e49\u0e07 16 \u0e0a\u0e48\u0e2d\u0e07\u0e16\u0e39\u0e01\u0e43\u0e2a\u0e48\u0e15\u0e32\u0e21\u0e01\u0e23\u0e30\u0e14\u0e32\u0e19\u0e08\u0e23\u0e34\u0e07\u0e41\u0e25\u0e49\u0e27 \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e0a\u0e37\u0e48\u0e2d Match \u0e44\u0e14\u0e49\u0e40\u0e25\u0e22 \u0e44\u0e21\u0e48\u0e15\u0e49\u0e2d\u0e07\u0e01\u0e23\u0e2d\u0e01\u0e0a\u0e37\u0e48\u0e2d\u0e41\u0e25\u0e30\u0e23\u0e32\u0e04\u0e32\u0e40\u0e2d\u0e07","historic":"Historic Match","historicSub":"\u0e0b\u0e37\u0e49\u0e2d\u0e1a\u0e31\u0e07\u0e04\u0e31\u0e1a \u0e2b\u0e23\u0e37\u0e2d Challenge \u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07","transfer":"Transfer","transferSub":"\u0e41\u0e25\u0e01\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30\u0e01\u0e31\u0e1a\u0e04\u0e39\u0e48\u0e41\u0e02\u0e48\u0e07\u0e2b\u0e23\u0e37\u0e2d\u0e01\u0e2d\u0e07\u0e2a\u0e33\u0e23\u0e2d\u0e07","gameChanger":"Game Changer","gameChangerSub":"\u0e08\u0e31\u0e48\u0e27\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e08\u0e23\u0e34\u0e07 \u0e41\u0e25\u0e49\u0e27\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e0a\u0e37\u0e48\u0e2d\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e43\u0e19\u0e40\u0e27\u0e47\u0e1a","teamJet":"Team Jet","teamJetSub":"\u0e22\u0e49\u0e32\u0e22\u0e2b\u0e21\u0e32\u0e01\u0e44\u0e1b\u0e0a\u0e48\u0e2d\u0e07\u0e01\u0e48\u0e2d\u0e19 Team Jet \u0e16\u0e31\u0e14\u0e44\u0e1b","goBench":"Go to the Bench","goBenchSub":"\u0e2a\u0e48\u0e07\u0e2b\u0e21\u0e32\u0e01\u0e44\u0e1b Bench \u0e42\u0e14\u0e22\u0e44\u0e21\u0e48\u0e23\u0e31\u0e1a\u0e1c\u0e25 GO","visiting":"Just Visiting","nothing":"\u0e44\u0e21\u0e48\u0e21\u0e35\u0e2d\u0e30\u0e44\u0e23\u0e40\u0e01\u0e34\u0e14\u0e02\u0e36\u0e49\u0e19","parking":"Free Parking","other":"\u0e08\u0e1a\u0e15\u0e32 / \u0e0a\u0e48\u0e2d\u0e07\u0e2d\u0e37\u0e48\u0e19","otherSub":"\u0e44\u0e21\u0e48\u0e21\u0e35 Action \u0e40\u0e1e\u0e34\u0e48\u0e21 \u0e41\u0e25\u0e49\u0e27\u0e2a\u0e48\u0e07\u0e43\u0e2b\u0e49\u0e04\u0e19\u0e16\u0e31\u0e14\u0e44\u0e1b","go":"GO / World Cup 26","goSub":"\u0e2b\u0e22\u0e38\u0e14\u0e17\u0e35\u0e48 GO, +4, Reactivate, \u0e40\u0e1b\u0e34\u0e14\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e08\u0e23\u0e34\u0e07","pointsStatus":"Points / Status","team":"\u0e17\u0e35\u0e21","history":"\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01","undo":"\u0e22\u0e49\u0e2d\u0e19\u0e01\u0e25\u0e31\u0e1a","matches":"Historic Matches","manage":"\u0e08\u0e31\u0e14\u0e01\u0e32\u0e23\u0e40\u0e01\u0e21","board":"\u0e01\u0e23\u0e30\u0e14\u0e32\u0e19","wcLeft":"World Cup 26 \u0e40\u0e2b\u0e25\u0e37\u0e2d","noKept":"\u0e44\u0e21\u0e48\u0e21\u0e35\u0e01\u0e32\u0e23\u0e4c\u0e14 Game Changer \u0e17\u0e35\u0e48\u0e40\u0e01\u0e47\u0e1a\u0e44\u0e27\u0e49","active":"ACTIVE","inactive":"INACTIVE","bench":"BENCH","startGame":"\u0e40\u0e23\u0e34\u0e48\u0e21\u0e40\u0e01\u0e21","passPhone":"\u0e2a\u0e48\u0e07\u0e42\u0e17\u0e23\u0e28\u0e31\u0e1e\u0e17\u0e4c\u0e43\u0e2b\u0e49","ready":"\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e41\u0e25\u0e49\u0e27","benchNotice":"\u0e04\u0e38\u0e13\u0e2d\u0e22\u0e39\u0e48\u0e1a\u0e19 Bench \u0e15\u0e49\u0e2d\u0e07\u0e08\u0e31\u0e14\u0e01\u0e32\u0e23\u0e01\u0e32\u0e23\u0e2d\u0e2d\u0e01\u0e08\u0e32\u0e01 Bench \u0e01\u0e48\u0e2d\u0e19","pickCard":"\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30","cancel":"\u0e22\u0e01\u0e40\u0e25\u0e34\u0e01","ok":"\u0e15\u0e01\u0e25\u0e07","next":"\u0e16\u0e31\u0e14\u0e44\u0e1b","save":"\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01","close":"\u0e1b\u0e34\u0e14","chooseMatch":"\u0e40\u0e25\u0e37\u0e2d\u0e01 Historic Match \u0e17\u0e35\u0e48\u0e2b\u0e21\u0e32\u0e01\u0e15\u0e01","uncontrolled":"\u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e21\u0e35\u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07","owner":"\u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07","cost":"\u0e23\u0e32\u0e04\u0e32","bonus":"Bonus","endValue":"Game End","mustBuy":"\u0e0a\u0e48\u0e2d\u0e07\u0e19\u0e35\u0e49\u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e21\u0e35\u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07 \u0e15\u0e49\u0e2d\u0e07\u0e0b\u0e37\u0e49\u0e2d\u0e43\u0e19\u0e23\u0e32\u0e04\u0e32\u0e17\u0e35\u0e48\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e1a\u0e19\u0e01\u0e23\u0e30\u0e14\u0e32\u0e19","bought":"\u0e04\u0e27\u0e1a\u0e04\u0e38\u0e21 Historic Match \u0e41\u0e25\u0e49\u0e27","ownMatch":"Historic Match \u0e02\u0e2d\u0e07\u0e04\u0e38\u0e13\u0e40\u0e2d\u0e07","chooseAttack":"Historic Match - \u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07\u0e40\u0e25\u0e37\u0e2d\u0e01 Attack","chooseDefense":"Historic Match - \u0e1c\u0e39\u0e49\u0e21\u0e32\u0e40\u0e22\u0e37\u0e2d\u0e19\u0e40\u0e25\u0e37\u0e2d\u0e01 Defense","privateStats":"\u0e43\u0e2b\u0e49\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19\u0e04\u0e19\u0e2d\u0e37\u0e48\u0e19\u0e2b\u0e25\u0e1a\u0e2a\u0e32\u0e22\u0e15\u0e32\u0e01\u0e48\u0e2d\u0e19\u0e14\u0e39 Stats","showMyCards":"\u0e14\u0e39\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e02\u0e2d\u0e07\u0e09\u0e31\u0e19","greenRoll":"\u0e17\u0e2d\u0e22\u0e25\u0e39\u0e01\u0e40\u0e15\u0e4b\u0e32\u0e2a\u0e35\u0e40\u0e02\u0e35\u0e22\u0e27 (Attack)","redRoll":"\u0e17\u0e2d\u0e22\u0e25\u0e39\u0e01\u0e40\u0e15\u0e4b\u0e32\u0e2a\u0e35\u0e41\u0e14\u0e07 (Defense)","chooseRealDie":"\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e1c\u0e25\u0e15\u0e32\u0e21\u0e2b\u0e19\u0e49\u0e32\u0e25\u0e39\u0e01\u0e40\u0e15\u0e4b\u0e32\u0e17\u0e35\u0e48\u0e2d\u0e2d\u0e01\u0e08\u0e23\u0e34\u0e07","ball":"\u0e25\u0e39\u0e01\u0e1a\u0e2d\u0e25","glove":"\u0e16\u0e38\u0e07\u0e21\u0e37\u0e2d","calculate":"\u0e04\u0e33\u0e19\u0e27\u0e13","ownerWins":"\u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07 Historic Match \u0e0a\u0e19\u0e30","visitorWins":"\u0e1c\u0e39\u0e49\u0e21\u0e32\u0e40\u0e22\u0e37\u0e2d\u0e19\u0e0a\u0e19\u0e30","completeSet":"Complete Set","visitorTakes":"\u0e44\u0e21\u0e48\u0e15\u0e49\u0e2d\u0e07\u0e08\u0e48\u0e32\u0e22 \u0e41\u0e25\u0e30\u0e22\u0e36\u0e14 Historic Match \u0e08\u0e32\u0e01\u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07","visitorNoTake":"\u0e44\u0e21\u0e48\u0e15\u0e49\u0e2d\u0e07\u0e08\u0e48\u0e32\u0e22 \u0e41\u0e15\u0e48\u0e22\u0e36\u0e14\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49 \u0e40\u0e1e\u0e23\u0e32\u0e30\u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07\u0e21\u0e35 Complete Color Set","insufficient":"Points \u0e44\u0e21\u0e48\u0e1e\u0e2d - \u0e02\u0e32\u0e22 Historic Match \u0e04\u0e37\u0e19 Bank","sell":"\u0e02\u0e32\u0e22\u0e04\u0e37\u0e19 Bank","chooseOwnTransfer":"\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30\u0e02\u0e2d\u0e07\u0e04\u0e38\u0e13\u0e17\u0e35\u0e48\u0e08\u0e30\u0e41\u0e25\u0e01","chooseTargetTransfer":"\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30\u0e17\u0e35\u0e48\u0e04\u0e38\u0e13\u0e15\u0e49\u0e2d\u0e07\u0e01\u0e32\u0e23","reserve":"\u0e01\u0e2d\u0e07\u0e2a\u0e33\u0e23\u0e2d\u0e07","transferDone":"Transfer \u0e2a\u0e33\u0e40\u0e23\u0e47\u0e08","statusMoves":"\u0e2a\u0e16\u0e32\u0e19\u0e30 Active / Inactive \u0e22\u0e49\u0e32\u0e22\u0e15\u0e34\u0e14\u0e44\u0e1b\u0e01\u0e31\u0e1a\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30","drawGC":"\u0e08\u0e31\u0e48\u0e27\u0e01\u0e32\u0e23\u0e4c\u0e14 Game Changer \u0e43\u0e1a\u0e1a\u0e19\u0e2a\u0e38\u0e14\u0e08\u0e32\u0e01\u0e01\u0e2d\u0e07\u0e08\u0e23\u0e34\u0e07 \u0e41\u0e25\u0e49\u0e27\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e0a\u0e37\u0e48\u0e2d\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e1a\u0e01\u0e32\u0e23\u0e4c\u0e14","whichGC":"\u0e04\u0e38\u0e13\u0e08\u0e31\u0e48\u0e27\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e43\u0e1a\u0e44\u0e2b\u0e19?","otherCard":"OTHER / \u0e01\u0e32\u0e23\u0e4c\u0e14\u0e2d\u0e37\u0e48\u0e19","otherCardHelp":"\u0e17\u0e33\u0e15\u0e32\u0e21\u0e02\u0e49\u0e2d\u0e04\u0e27\u0e32\u0e21\u0e1a\u0e19\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e08\u0e23\u0e34\u0e07 \u0e41\u0e25\u0e49\u0e27\u0e43\u0e0a\u0e49\u0e40\u0e21\u0e19\u0e39\u0e08\u0e31\u0e14\u0e01\u0e32\u0e23\u0e40\u0e01\u0e21\u0e16\u0e49\u0e32\u0e15\u0e49\u0e2d\u0e07\u0e1b\u0e23\u0e31\u0e1a\u0e04\u0e30\u0e41\u0e19\u0e19\u0e2b\u0e23\u0e37\u0e2d\u0e2a\u0e16\u0e32\u0e19\u0e30","kept":"\u0e40\u0e01\u0e47\u0e1a\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e44\u0e27\u0e49\u0e43\u0e0a\u0e49\u0e20\u0e32\u0e22\u0e2b\u0e25\u0e31\u0e07","fansUse":"THE FANS GO WILD! \u0e2a\u0e32\u0e21\u0e32\u0e23\u0e16\u0e43\u0e0a\u0e49\u0e2b\u0e25\u0e31\u0e07\u0e17\u0e2d\u0e22 Red Defense Die \u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e40\u0e1b\u0e25\u0e35\u0e48\u0e22\u0e19\u0e1c\u0e25\u0e40\u0e1b\u0e47\u0e19\u0e16\u0e38\u0e07\u0e21\u0e37\u0e2d","sentOffUse":"SENT OFF! - \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e04\u0e39\u0e48\u0e41\u0e02\u0e48\u0e07","sentOffDone":"\u0e16\u0e39\u0e01\u0e2a\u0e48\u0e07\u0e44\u0e1b Bench","chooseOpponent":"\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e04\u0e39\u0e48\u0e41\u0e02\u0e48\u0e07","whiteTie":"\u0e25\u0e39\u0e01\u0e40\u0e15\u0e4b\u0e32\u0e2a\u0e35\u0e02\u0e32\u0e27 - Tiebreak","tieAgain":"\u0e40\u0e2a\u0e21\u0e2d\u0e2d\u0e35\u0e01\u0e04\u0e23\u0e31\u0e49\u0e07 \u0e15\u0e49\u0e2d\u0e07\u0e17\u0e2d\u0e22\u0e43\u0e2b\u0e21\u0e48","goResult":"\u0e16\u0e36\u0e07 GO: \u0e23\u0e31\u0e1a 4 Points \u0e41\u0e25\u0e30 Reactivate \u0e19\u0e31\u0e01\u0e40\u0e15\u0e30\u0e17\u0e31\u0e49\u0e07\u0e17\u0e35\u0e21","openWC":"\u0e40\u0e1b\u0e34\u0e14\u0e01\u0e32\u0e23\u0e4c\u0e14 FIFA World Cup 26 \u0e43\u0e1a\u0e1a\u0e19\u0e2a\u0e38\u0e14\u0e08\u0e32\u0e01\u0e01\u0e2d\u0e07\u0e08\u0e23\u0e34\u0e07","expected":"\u0e15\u0e32\u0e21\u0e25\u0e33\u0e14\u0e31\u0e1a\u0e15\u0e2d\u0e19\u0e19\u0e35\u0e49\u0e04\u0e27\u0e23\u0e40\u0e1b\u0e47\u0e19\u0e2b\u0e21\u0e32\u0e22\u0e40\u0e25\u0e02","wcChooseOpponent":"\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e04\u0e39\u0e48\u0e41\u0e02\u0e48\u0e07\u0e15\u0e32\u0e21\u0e17\u0e35\u0e48\u0e01\u0e32\u0e23\u0e4c\u0e14 FIFA World Cup 26 \u0e23\u0e30\u0e1a\u0e38","wcRead":"\u0e2d\u0e48\u0e32\u0e19 FIFA World Cup 26 \u0e08\u0e32\u0e01\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e08\u0e23\u0e34\u0e07","round":"Round","currentSide":"\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19\u0e1b\u0e31\u0e08\u0e08\u0e38\u0e1a\u0e31\u0e19","opponent":"\u0e04\u0e39\u0e48\u0e41\u0e02\u0e48\u0e07","wcGameEnd":"Game End Value \u0e17\u0e35\u0e48\u0e21\u0e38\u0e21\u0e01\u0e32\u0e23\u0e4c\u0e14","wcWinner":"\u0e0a\u0e19\u0e30\u0e41\u0e25\u0e30\u0e40\u0e01\u0e47\u0e1a\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e08\u0e23\u0e34\u0e07\u0e44\u0e27\u0e49","boardTitle":"\u0e25\u0e33\u0e14\u0e31\u0e1a\u0e0a\u0e48\u0e2d\u0e07\u0e1a\u0e19\u0e01\u0e23\u0e30\u0e14\u0e32\u0e19\u0e08\u0e23\u0e34\u0e07","boardHelp":"\u0e43\u0e0a\u0e49\u0e2a\u0e33\u0e2b\u0e23\u0e31\u0e1a\u0e2d\u0e49\u0e32\u0e07\u0e2d\u0e34\u0e07\u0e15\u0e33\u0e41\u0e2b\u0e19\u0e48\u0e07\u0e0a\u0e48\u0e2d\u0e07\u0e40\u0e17\u0e48\u0e32\u0e19\u0e31\u0e49\u0e19 \u0e40\u0e27\u0e47\u0e1a\u0e44\u0e21\u0e48\u0e40\u0e14\u0e34\u0e19\u0e2b\u0e21\u0e32\u0e01\u0e41\u0e17\u0e19\u0e01\u0e23\u0e30\u0e14\u0e32\u0e19\u0e08\u0e23\u0e34\u0e07","jetHelp":"\u0e22\u0e49\u0e32\u0e22\u0e2b\u0e21\u0e32\u0e01\u0e08\u0e23\u0e34\u0e07\u0e44\u0e1b\u0e0a\u0e48\u0e2d\u0e07\u0e43\u0e14\u0e01\u0e47\u0e44\u0e14\u0e49\u0e17\u0e35\u0e48\u0e2d\u0e22\u0e39\u0e48\u0e23\u0e30\u0e2b\u0e27\u0e48\u0e32\u0e07 Team Jet \u0e0a\u0e48\u0e2d\u0e07\u0e19\u0e35\u0e49\u0e01\u0e31\u0e1a Team Jet \u0e16\u0e31\u0e14\u0e44\u0e1b \u0e08\u0e32\u0e01\u0e19\u0e31\u0e49\u0e19\u0e01\u0e14 Action \u0e02\u0e2d\u0e07\u0e0a\u0e48\u0e2d\u0e07\u0e1b\u0e25\u0e32\u0e22\u0e17\u0e32\u0e07 \u0e42\u0e14\u0e22\u0e22\u0e31\u0e07\u0e40\u0e1b\u0e47\u0e19\u0e15\u0e32\u0e02\u0e2d\u0e07\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19\u0e04\u0e19\u0e40\u0e14\u0e34\u0e21","benchTitle":"\u0e04\u0e38\u0e13\u0e2d\u0e22\u0e39\u0e48\u0e1a\u0e19 Bench","benchAttempts":"\u0e08\u0e33\u0e19\u0e27\u0e19\u0e04\u0e23\u0e31\u0e49\u0e07\u0e17\u0e35\u0e48\u0e25\u0e2d\u0e07\u0e17\u0e2d\u0e22\u0e2d\u0e2d\u0e01\u0e41\u0e25\u0e49\u0e27","payOne":"\u0e08\u0e48\u0e32\u0e22 1 Point \u0e41\u0e25\u0e49\u0e27\u0e2d\u0e2d\u0e01","tryWhite":"\u0e25\u0e2d\u0e07\u0e17\u0e2d\u0e22 White Die","outBench":"\u0e2d\u0e2d\u0e01\u0e08\u0e32\u0e01 Bench \u0e41\u0e25\u0e49\u0e27","rollMove":"\u0e17\u0e2d\u0e22 White Die \u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e40\u0e14\u0e34\u0e19\u0e15\u0e32\u0e21\u0e1b\u0e01\u0e15\u0e34 \u0e41\u0e25\u0e49\u0e27\u0e40\u0e25\u0e37\u0e2d\u0e01 Action \u0e02\u0e2d\u0e07\u0e0a\u0e48\u0e2d\u0e07\u0e17\u0e35\u0e48\u0e15\u0e01","rolledSix":"\u0e17\u0e2d\u0e22\u0e44\u0e14\u0e49 6","moveSixEnd":"\u0e22\u0e49\u0e32\u0e22\u0e2b\u0e21\u0e32\u0e01\u0e08\u0e23\u0e34\u0e07 6 \u0e0a\u0e48\u0e2d\u0e07 \u0e41\u0e25\u0e49\u0e27\u0e15\u0e32\u0e08\u0e1a\u0e17\u0e31\u0e19\u0e17\u0e35","stayBench":"\u0e22\u0e31\u0e07\u0e2d\u0e2d\u0e01\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49 \u0e2d\u0e22\u0e39\u0e48 Bench \u0e15\u0e48\u0e2d\u0e41\u0e25\u0e30\u0e15\u0e32\u0e08\u0e1a","thirdFail":"\u0e04\u0e23\u0e1a 3 \u0e04\u0e23\u0e31\u0e49\u0e07\u0e41\u0e25\u0e49\u0e27","payMove":"\u0e08\u0e48\u0e32\u0e22 1 Point \u0e41\u0e25\u0e49\u0e27\u0e40\u0e14\u0e34\u0e19\u0e15\u0e32\u0e21\u0e1c\u0e25 White Die \u0e25\u0e48\u0e32\u0e2a\u0e38\u0e14 \u0e08\u0e32\u0e01\u0e19\u0e31\u0e49\u0e19\u0e40\u0e25\u0e37\u0e2d\u0e01 Action \u0e02\u0e2d\u0e07\u0e0a\u0e48\u0e2d\u0e07\u0e17\u0e35\u0e48\u0e15\u0e01","managePoints":"\u0e1b\u0e23\u0e31\u0e1a Points","manageActive":"Active / Inactive","manageOwner":"\u0e41\u0e01\u0e49\u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07 Historic Match","finalScore":"\u0e04\u0e33\u0e19\u0e27\u0e13 Final Score","choosePlayer":"\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19","pointChange":"Point change (+/-)","choosePlayerCard":"\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e19\u0e31\u0e01\u0e40\u0e15\u0e30\u0e17\u0e35\u0e48\u0e08\u0e30\u0e2a\u0e25\u0e31\u0e1a\u0e2a\u0e16\u0e32\u0e19\u0e30","bank":"Bank / \u0e44\u0e21\u0e48\u0e21\u0e35\u0e40\u0e08\u0e49\u0e32\u0e02\u0e2d\u0e07","finalHighest":"\u0e21\u0e35\u0e04\u0e30\u0e41\u0e19\u0e19\u0e2a\u0e39\u0e07\u0e2a\u0e38\u0e14","finalTie":"\u0e16\u0e49\u0e32\u0e40\u0e2a\u0e21\u0e2d \u0e43\u0e2b\u0e49\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19\u0e17\u0e35\u0e48\u0e40\u0e2a\u0e21\u0e2d\u0e17\u0e2d\u0e22 White Die \u0e08\u0e23\u0e34\u0e07\u0e15\u0e31\u0e14\u0e2a\u0e34\u0e19","confirmReset":"\u0e15\u0e49\u0e2d\u0e07\u0e01\u0e32\u0e23\u0e40\u0e23\u0e34\u0e48\u0e21\u0e40\u0e01\u0e21\u0e43\u0e2b\u0e21\u0e48\u0e41\u0e25\u0e30\u0e25\u0e1a\u0e40\u0e01\u0e21\u0e17\u0e35\u0e48\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01\u0e44\u0e27\u0e49\u0e2b\u0e23\u0e37\u0e2d\u0e44\u0e21\u0e48?","error":"\u0e40\u0e01\u0e34\u0e14\u0e02\u0e49\u0e2d\u0e1c\u0e34\u0e14\u0e1e\u0e25\u0e32\u0e14","restored":"\u0e23\u0e30\u0e1a\u0e1a\u0e22\u0e49\u0e2d\u0e19\u0e01\u0e25\u0e31\u0e1a\u0e44\u0e1b\u0e01\u0e48\u0e2d\u0e19 Action \u0e19\u0e35\u0e49\u0e41\u0e25\u0e49\u0e27","gameSaved":"\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01\u0e2d\u0e31\u0e15\u0e42\u0e19\u0e21\u0e31\u0e15\u0e34\u0e43\u0e19\u0e40\u0e04\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e19\u0e35\u0e49"};
+T.other="\u0e08\u0e1a\u0e40\u0e17\u0e34\u0e23\u0e4c\u0e19";
+const PLAYERS=[{"id":1,"name":"Lionel Messi","country":"Argentina","role":"FW / AM","rating":95,"attack":94,"defense":78,"skills":95,"best":"Skills","accuracy":"Verified"},{"id":2,"name":"Lautaro Mart\u00ednez","country":"Argentina","role":"ST","rating":89,"attack":93,"defense":78,"skills":84,"best":"Attack","accuracy":"Proxy estimate"},{"id":3,"name":"Diego Maradona","country":"Argentina","role":"AM / FW","rating":95,"attack":94,"defense":76,"skills":96,"best":"Skills","accuracy":"Proxy estimate"},{"id":4,"name":"Gabriel Batistuta","country":"Argentina","role":"ST","rating":92,"attack":96,"defense":78,"skills":86,"best":"Attack","accuracy":"Proxy estimate"},{"id":5,"name":"Javier Zanetti","country":"Argentina","role":"RB / DM","rating":91,"attack":84,"defense":94,"skills":88,"best":"Defense","accuracy":"Proxy estimate"},{"id":6,"name":"Sergio Ag\u00fcero","country":"Argentina","role":"ST","rating":92,"attack":95,"defense":75,"skills":91,"best":"Attack","accuracy":"Proxy estimate"},{"id":7,"name":"Kylian Mbapp\u00e9","country":"France","role":"ST / LW","rating":92,"attack":91,"defense":74,"skills":90,"best":"Attack","accuracy":"Verified"},{"id":8,"name":"Franck Rib\u00e9ry","country":"France","role":"LW","rating":91,"attack":90,"defense":75,"skills":94,"best":"Skills","accuracy":"Proxy estimate"},{"id":9,"name":"Zinedine Zidane","country":"France","role":"AM / CM","rating":94,"attack":91,"defense":82,"skills":95,"best":"Skills","accuracy":"Partially verified + proxy"},{"id":10,"name":"Robert Pir\u00e8s","country":"France","role":"LW / AM","rating":88,"attack":88,"defense":76,"skills":90,"best":"Skills","accuracy":"Proxy estimate"},{"id":11,"name":"Warren Za\u00efre-Emery","country":"France","role":"CM","rating":84,"attack":82,"defense":84,"skills":86,"best":"Skills","accuracy":"Proxy estimate"},{"id":12,"name":"David Trezeguet","country":"France","role":"ST","rating":89,"attack":94,"defense":76,"skills":82,"best":"Attack","accuracy":"Proxy estimate"},{"id":13,"name":"Michel Platini","country":"France","role":"AM","rating":94,"attack":93,"defense":78,"skills":95,"best":"Skills","accuracy":"Proxy estimate"},{"id":14,"name":"Vini Jr.","country":"Brazil","role":"LW","rating":91,"attack":91,"defense":73,"skills":93,"best":"Skills","accuracy":"Proxy estimate"},{"id":15,"name":"Neymar Jr.","country":"Brazil","role":"LW / AM","rating":95,"attack":92,"defense":78,"skills":92,"best":"Attack / Skills","accuracy":"Verified"},{"id":16,"name":"Pel\u00e9","country":"Brazil","role":"FW / AM","rating":95,"attack":94,"defense":78,"skills":95,"best":"Skills","accuracy":"Verified"},{"id":17,"name":"Roberto Carlos","country":"Brazil","role":"LB","rating":92,"attack":88,"defense":92,"skills":91,"best":"Defense","accuracy":"Proxy estimate"},{"id":18,"name":"Ronaldo","country":"Brazil","role":"ST","rating":95,"attack":93,"defense":79,"skills":95,"best":"Skills","accuracy":"Verified"},{"id":19,"name":"Kak\u00e1","country":"Brazil","role":"AM","rating":92,"attack":91,"defense":78,"skills":94,"best":"Skills","accuracy":"Proxy estimate"},{"id":20,"name":"Bebeto","country":"Brazil","role":"ST / SS","rating":89,"attack":92,"defense":76,"skills":88,"best":"Attack","accuracy":"Proxy estimate"},{"id":21,"name":"Rivaldo","country":"Brazil","role":"AM / FW","rating":92,"attack":93,"defense":76,"skills":93,"best":"Attack / Skills","accuracy":"Proxy estimate"},{"id":22,"name":"Harry Kane","country":"England","role":"ST","rating":89,"attack":96,"defense":80,"skills":77,"best":"Attack","accuracy":"Verified"},{"id":23,"name":"Steven Gerrard","country":"England","role":"CM","rating":92,"attack":90,"defense":91,"skills":90,"best":"Defense","accuracy":"Proxy estimate"},{"id":24,"name":"Paul Scholes","country":"England","role":"CM","rating":91,"attack":88,"defense":88,"skills":94,"best":"Skills","accuracy":"Proxy estimate"},{"id":25,"name":"Ollie Watkins","country":"England","role":"ST","rating":84,"attack":88,"defense":75,"skills":80,"best":"Attack","accuracy":"Proxy estimate"},{"id":26,"name":"Michael Owen","country":"England","role":"ST","rating":90,"attack":94,"defense":74,"skills":88,"best":"Attack","accuracy":"Proxy estimate"},{"id":27,"name":"Wayne Rooney","country":"England","role":"FW / AM","rating":92,"attack":94,"defense":83,"skills":90,"best":"Attack","accuracy":"Proxy estimate"},{"id":28,"name":"Pepe","country":"Portugal","role":"CB","rating":90,"attack":78,"defense":95,"skills":80,"best":"Defense","accuracy":"Proxy estimate"},{"id":29,"name":"Phil Foden","country":"England","role":"AM / RW","rating":88,"attack":87,"defense":74,"skills":91,"best":"Skills","accuracy":"Proxy estimate"},{"id":30,"name":"Gon\u00e7alo Ramos","country":"Portugal","role":"ST","rating":83,"attack":87,"defense":74,"skills":78,"best":"Attack","accuracy":"Proxy estimate"},{"id":31,"name":"Lu\u00eds Figo","country":"Portugal","role":"RW / AM","rating":93,"attack":92,"defense":77,"skills":95,"best":"Skills","accuracy":"Proxy estimate"},{"id":32,"name":"Ricardo Carvalho","country":"Portugal","role":"CB","rating":89,"attack":77,"defense":94,"skills":81,"best":"Defense","accuracy":"Proxy estimate"},{"id":33,"name":"Bernardo Silva","country":"Portugal","role":"AM / RW","rating":89,"attack":86,"defense":78,"skills":93,"best":"Skills","accuracy":"Proxy estimate"},{"id":34,"name":"Alessandro Nesta","country":"Italy","role":"CB","rating":93,"attack":78,"defense":96,"skills":84,"best":"Defense","accuracy":"Proxy estimate"},{"id":35,"name":"Federico Chiesa","country":"Italy","role":"RW / LW","rating":86,"attack":88,"defense":73,"skills":87,"best":"Attack","accuracy":"Proxy estimate"},{"id":36,"name":"Fabio Cannavaro","country":"Italy","role":"CB","rating":93,"attack":76,"defense":97,"skills":84,"best":"Defense","accuracy":"Proxy estimate"},{"id":37,"name":"Paolo Maldini","country":"Italy","role":"CB / LB","rating":95,"attack":82,"defense":98,"skills":90,"best":"Defense","accuracy":"Proxy estimate"},{"id":38,"name":"Claudio Marchisio","country":"Italy","role":"CM","rating":88,"attack":87,"defense":88,"skills":89,"best":"Skills","accuracy":"Proxy estimate"},{"id":39,"name":"Alessandro Del Piero","country":"Italy","role":"SS / AM","rating":94,"attack":88,"defense":81,"skills":92,"best":"Skills","accuracy":"Verified"},{"id":40,"name":"Xabi Alonso","country":"Spain","role":"DM / CM","rating":92,"attack":86,"defense":93,"skills":94,"best":"Skills","accuracy":"Proxy estimate"},{"id":41,"name":"Lamine Yamal","country":"Spain","role":"RW","rating":85,"attack":84,"defense":71,"skills":82,"best":"Attack","accuracy":"Verified"},{"id":42,"name":"David Silva","country":"Spain","role":"AM / CM","rating":91,"attack":88,"defense":79,"skills":95,"best":"Skills","accuracy":"Proxy estimate"},{"id":43,"name":"Andr\u00e9s Iniesta","country":"Spain","role":"CM / AM","rating":94,"attack":89,"defense":85,"skills":97,"best":"Skills","accuracy":"Proxy estimate"},{"id":44,"name":"David Villa","country":"Spain","role":"ST / LW","rating":91,"attack":94,"defense":76,"skills":89,"best":"Attack","accuracy":"Proxy estimate"},{"id":45,"name":"Sergio Busquets","country":"Spain","role":"DM","rating":92,"attack":80,"defense":96,"skills":92,"best":"Defense","accuracy":"Proxy estimate"},{"id":46,"name":"Gerard Piqu\u00e9","country":"Spain","role":"CB","rating":91,"attack":81,"defense":95,"skills":88,"best":"Defense","accuracy":"Proxy estimate"},{"id":47,"name":"Christian Pulisic","country":"United States","role":"RW / LW","rating":86,"attack":83,"defense":75,"skills":81,"best":"Attack","accuracy":"Verified"},{"id":48,"name":"Landon Donovan","country":"United States","role":"FW / AM","rating":87,"attack":88,"defense":78,"skills":86,"best":"Attack","accuracy":"Proxy estimate"},{"id":49,"name":"Claudio Reyna","country":"United States","role":"CM","rating":84,"attack":82,"defense":85,"skills":87,"best":"Skills","accuracy":"Proxy estimate"},{"id":50,"name":"Weston McKennie","country":"United States","role":"CM","rating":84,"attack":82,"defense":88,"skills":83,"best":"Defense","accuracy":"Proxy estimate"},{"id":51,"name":"Clint Dempsey","country":"United States","role":"FW / AM","rating":86,"attack":89,"defense":78,"skills":85,"best":"Attack","accuracy":"Proxy estimate"},{"id":52,"name":"Antonee Robinson","country":"United States","role":"LB","rating":83,"attack":81,"defense":87,"skills":85,"best":"Defense","accuracy":"Proxy estimate"},{"id":53,"name":"Carlos Vela","country":"Mexico","role":"RW / SS","rating":86,"attack":88,"defense":74,"skills":89,"best":"Skills","accuracy":"Proxy estimate"},{"id":54,"name":"P\u00e1vel Pardo","country":"Mexico","role":"DM / CM","rating":84,"attack":80,"defense":88,"skills":86,"best":"Defense","accuracy":"Proxy estimate"},{"id":55,"name":"Andr\u00e9s Guardado","country":"Mexico","role":"CM / LM","rating":85,"attack":83,"defense":87,"skills":88,"best":"Skills","accuracy":"Proxy estimate"},{"id":56,"name":"Hugo S\u00e1nchez","country":"Mexico","role":"ST","rating":92,"attack":97,"defense":75,"skills":89,"best":"Attack","accuracy":"Proxy estimate"},{"id":57,"name":"Rafael M\u00e1rquez","country":"Mexico","role":"CB / DM","rating":90,"attack":82,"defense":94,"skills":87,"best":"Defense","accuracy":"Proxy estimate"},{"id":58,"name":"Ra\u00fal Jim\u00e9nez","country":"Mexico","role":"ST","rating":84,"attack":88,"defense":76,"skills":80,"best":"Attack","accuracy":"Proxy estimate"},{"id":59,"name":"Thomas M\u00fcller","country":"Germany","role":"SS / AM","rating":91,"attack":93,"defense":82,"skills":88,"best":"Attack","accuracy":"Proxy estimate"},{"id":60,"name":"Franz Beckenbauer","country":"Germany","role":"CB / DM","rating":95,"attack":86,"defense":97,"skills":95,"best":"Defense","accuracy":"Proxy estimate"},{"id":61,"name":"Philipp Lahm","country":"Germany","role":"RB / DM","rating":93,"attack":84,"defense":96,"skills":94,"best":"Defense","accuracy":"Proxy estimate"},{"id":62,"name":"Miroslav Klose","country":"Germany","role":"ST","rating":90,"attack":95,"defense":77,"skills":84,"best":"Attack","accuracy":"Proxy estimate"},{"id":63,"name":"Paul Breitner","country":"Germany","role":"LB / CM","rating":91,"attack":88,"defense":93,"skills":91,"best":"Defense","accuracy":"Proxy estimate"},{"id":64,"name":"Lothar Matth\u00e4us","country":"Germany","role":"CM / DM","rating":95,"attack":92,"defense":96,"skills":94,"best":"Defense","accuracy":"Proxy estimate"},{"id":65,"name":"Federico Valverde","country":"Uruguay","role":"CM","rating":89,"attack":88,"defense":91,"skills":90,"best":"Defense","accuracy":"Proxy estimate"},{"id":66,"name":"Eden Hazard","country":"Belgium","role":"LW / AM","rating":92,"attack":91,"defense":74,"skills":96,"best":"Skills","accuracy":"Proxy estimate"},{"id":67,"name":"Luis Su\u00e1rez","country":"Uruguay","role":"ST","rating":94,"attack":97,"defense":80,"skills":92,"best":"Attack","accuracy":"Proxy estimate"},{"id":68,"name":"Diego Forl\u00e1n","country":"Uruguay","role":"ST / AM","rating":90,"attack":94,"defense":78,"skills":89,"best":"Attack","accuracy":"Proxy estimate"},{"id":69,"name":"Enzo Francescoli","country":"Uruguay","role":"AM / SS","rating":91,"attack":90,"defense":77,"skills":94,"best":"Skills","accuracy":"Proxy estimate"},{"id":70,"name":"Edinson Cavani","country":"Uruguay","role":"ST","rating":90,"attack":95,"defense":82,"skills":86,"best":"Attack","accuracy":"Proxy estimate"},{"id":71,"name":"Timothy Weah","country":"United States","role":"RW / ST","rating":82,"attack":84,"defense":72,"skills":82,"best":"Attack","accuracy":"Proxy estimate"},{"id":72,"name":"Patrick Kluivert","country":"Netherlands","role":"ST","rating":89,"attack":94,"defense":76,"skills":85,"best":"Attack","accuracy":"Proxy estimate"},{"id":73,"name":"Marco van Basten","country":"Netherlands","role":"ST","rating":95,"attack":98,"defense":78,"skills":93,"best":"Attack","accuracy":"Proxy estimate"},{"id":74,"name":"Dennis Bergkamp","country":"Netherlands","role":"SS / AM","rating":93,"attack":91,"defense":76,"skills":97,"best":"Skills","accuracy":"Proxy estimate"},{"id":75,"name":"Ruud Gullit","country":"Netherlands","role":"CM / FW","rating":95,"attack":94,"defense":94,"skills":96,"best":"Skills","accuracy":"Proxy estimate"},{"id":76,"name":"Robin van Persie","country":"Netherlands","role":"ST","rating":89,"attack":87,"defense":73,"skills":87,"best":"Attack / Skills","accuracy":"Verified"},{"id":77,"name":"Julian De Guzman","country":"Canada","role":"CM / DM","rating":82,"attack":80,"defense":84,"skills":84,"best":"Defense / Skills","accuracy":"Proxy estimate"},{"id":78,"name":"Alphonso Davies","country":"Canada","role":"LB / LW","rating":86,"attack":88,"defense":89,"skills":92,"best":"Skills","accuracy":"Proxy estimate"},{"id":79,"name":"Victor Moses","country":"Nigeria","role":"RW / RWB","rating":83,"attack":84,"defense":83,"skills":85,"best":"Skills","accuracy":"Proxy estimate"},{"id":80,"name":"Benni McCarthy","country":"South Africa","role":"ST","rating":85,"attack":89,"defense":76,"skills":82,"best":"Attack","accuracy":"Proxy estimate"},{"id":81,"name":"John Obi Mikel","country":"Nigeria","role":"DM / CM","rating":86,"attack":78,"defense":93,"skills":86,"best":"Defense","accuracy":"Proxy estimate"},{"id":82,"name":"Jay-Jay Okocha","country":"Nigeria","role":"AM","rating":90,"attack":88,"defense":73,"skills":97,"best":"Skills","accuracy":"Proxy estimate"},{"id":83,"name":"Heung-min Son","country":"Korea Republic","role":"LW / ST","rating":88,"attack":87,"defense":74,"skills":84,"best":"Attack","accuracy":"Verified"},{"id":84,"name":"Robert Lewandowski","country":"Poland","role":"ST","rating":94,"attack":98,"defense":79,"skills":89,"best":"Attack","accuracy":"Proxy estimate"},{"id":85,"name":"Alexis S\u00e1nchez","country":"Chile","role":"LW / ST","rating":89,"attack":91,"defense":78,"skills":91,"best":"Attack / Skills","accuracy":"Proxy estimate"},{"id":86,"name":"Cindy Parlow Cone","country":"United States","role":"FW","rating":88,"attack":91,"defense":76,"skills":86,"best":"Attack","accuracy":"Proxy estimate"},{"id":87,"name":"Kristine Lilly","country":"United States","role":"LW / MF","rating":91,"attack":92,"defense":82,"skills":92,"best":"Attack / Skills","accuracy":"Proxy estimate"},{"id":88,"name":"Birgit Prinz","country":"Germany","role":"ST","rating":94,"attack":97,"defense":82,"skills":91,"best":"Attack","accuracy":"Proxy estimate"},{"id":89,"name":"Brandi Chastain","country":"United States","role":"DF / MF","rating":90,"attack":84,"defense":94,"skills":88,"best":"Defense","accuracy":"Proxy estimate"},{"id":90,"name":"Michelle Akers","country":"United States","role":"CM / FW","rating":94,"attack":93,"defense":94,"skills":92,"best":"Defense","accuracy":"Proxy estimate"},{"id":91,"name":"Mia Hamm","country":"United States","role":"FW / AM","rating":90,"attack":92,"defense":71,"skills":89,"best":"Attack","accuracy":"Verified"},{"id":92,"name":"Abby Wambach","country":"United States","role":"ST","rating":92,"attack":96,"defense":82,"skills":87,"best":"Attack","accuracy":"Proxy estimate"},{"id":93,"name":"Julie Foudy","country":"United States","role":"CM","rating":90,"attack":86,"defense":91,"skills":92,"best":"Skills","accuracy":"Proxy estimate"},{"id":94,"name":"Trinity Rodman","country":"United States","role":"RW / ST","rating":87,"attack":89,"defense":73,"skills":87,"best":"Attack","accuracy":"Proxy estimate"},{"id":95,"name":"Sophia Wilson","country":"United States","role":"ST / LW","rating":88,"attack":91,"defense":74,"skills":86,"best":"Attack","accuracy":"Proxy estimate"},{"id":96,"name":"Marta","country":"Brazil","role":"AM / FW","rating":95,"attack":94,"defense":76,"skills":97,"best":"Skills","accuracy":"Proxy estimate"},{"id":97,"name":"Kelly Smith","country":"England","role":"ST / AM","rating":91,"attack":93,"defense":77,"skills":92,"best":"Attack","accuracy":"Proxy estimate"},{"id":98,"name":"Jennifer Hermoso","country":"Spain","role":"ST / AM","rating":90,"attack":92,"defense":78,"skills":90,"best":"Attack","accuracy":"Proxy estimate"},{"id":99,"name":"Aitana Bonmat\u00ed","country":"Spain","role":"CM / AM","rating":93,"attack":89,"defense":76,"skills":93,"best":"Skills","accuracy":"Verified"},{"id":100,"name":"Christine Sinclair","country":"Canada","role":"ST / AM","rating":93,"attack":96,"defense":80,"skills":91,"best":"Attack","accuracy":"Proxy estimate"}];
+const MATCH_TEMPLATE=[{"id":0,"boardPos":1,"color":"brown","year":1990,"stage":"GROUP STAGE","teams":"Romania vs Argentina","cost":1,"bonus":1,"end":2},{"id":1,"boardPos":3,"color":"brown","year":2002,"stage":"GROUP STAGE","teams":"France vs Senegal","cost":1,"bonus":1,"end":2},{"id":2,"boardPos":5,"color":"lightblue","year":1950,"stage":"GROUP STAGE","teams":"USA vs England","cost":1,"bonus":1,"end":2},{"id":3,"boardPos":7,"color":"lightblue","year":2014,"stage":"GROUP STAGE","teams":"Spain vs Netherlands","cost":1,"bonus":1,"end":2},{"id":4,"boardPos":9,"color":"orange","year":2018,"stage":"ROUND OF 16","teams":"Belgium vs Japan","cost":2,"bonus":2,"end":3},{"id":5,"boardPos":11,"color":"orange","year":1986,"stage":"ROUND OF 16","teams":"Italy vs France","cost":2,"bonus":2,"end":3},{"id":6,"boardPos":13,"color":"pink","year":2006,"stage":"ROUND OF 16","teams":"Argentina vs Mexico","cost":2,"bonus":2,"end":3},{"id":7,"boardPos":15,"color":"pink","year":2002,"stage":"ROUND OF 16","teams":"Korea Republic vs Italy","cost":2,"bonus":2,"end":3},{"id":8,"boardPos":17,"color":"red","year":2010,"stage":"QUARTER-FINAL","teams":"Uruguay vs Ghana","cost":3,"bonus":3,"end":4},{"id":9,"boardPos":19,"color":"red","year":2022,"stage":"QUARTER-FINAL","teams":"Morocco vs Portugal","cost":3,"bonus":3,"end":4},{"id":10,"boardPos":21,"color":"yellow","year":1954,"stage":"QUARTER-FINAL","teams":"Austria vs Switzerland","cost":3,"bonus":3,"end":4},{"id":11,"boardPos":23,"color":"yellow","year":1994,"stage":"QUARTER-FINAL","teams":"Bulgaria vs Germany","cost":3,"bonus":3,"end":4},{"id":12,"boardPos":25,"color":"green","year":1962,"stage":"SEMI-FINAL","teams":"Brazil vs Chile","cost":4,"bonus":4,"end":5},{"id":13,"boardPos":27,"color":"green","year":2006,"stage":"SEMI-FINAL","teams":"Germany vs Italy","cost":4,"bonus":4,"end":5},{"id":14,"boardPos":29,"color":"blue","year":1970,"stage":"FINAL","teams":"Brazil vs Italy","cost":5,"bonus":5,"end":6},{"id":15,"boardPos":31,"color":"blue","year":2022,"stage":"FINAL","teams":"Argentina vs France","cost":5,"bonus":5,"end":6}];
+const BOARD=["GO","1990 Group Stage - Romania vs Argentina","Transfer","2002 Group Stage - France vs Senegal","Team Jet","1950 Group Stage - USA vs England","Game Changer","2014 Group Stage - Spain vs Netherlands","Just Visiting / On the Bench","2018 Round of 16 - Belgium vs Japan","Game Changer","1986 Round of 16 - Italy vs France","Team Jet","2006 Round of 16 - Argentina vs Mexico","Transfer","2002 Round of 16 - Korea Republic vs Italy","Free Parking","2010 Quarter-Final - Uruguay vs Ghana","Transfer","2022 Quarter-Final - Morocco vs Portugal","Team Jet","1954 Quarter-Final - Austria vs Switzerland","Game Changer","1994 Quarter-Final - Bulgaria vs Germany","Go to the Bench","1962 Semi-Final - Brazil vs Chile","Transfer","2006 Semi-Final - Germany vs Italy","Team Jet","1970 Final - Brazil vs Italy","Game Changer","2022 Final - Argentina vs France"];
+const COLORS={brown:"#8a5b43",lightblue:"#84c5dc",orange:"#e88b4b",pink:"#df6ea6",red:"#d95151",yellow:"#d7bd48",green:"#4f9b69",blue:"#4779bd"};
+const TOKENS=[
+ {id:"silver",name:T.silver,color:"#bcc3c8"},
+ {id:"gold",name:T.gold,color:"#d0aa55"},
+ {id:"red",name:T.red,color:"#d95259"},
+ {id:"blue",name:T.blue,color:"#4274c5"}
+];
+const AVATARS=["rabbit","panda","fox","bear","cat","dog","penguin","otter"];
+const SAVE_KEY="mwfc26_v6";
+let setupN=2;
+let setupProfiles=[];
+let state=null;
+let historyStack=[];
+let actionLocked=false;
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const clone=x=>JSON.parse(JSON.stringify(x));
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+const byId=id=>PLAYERS.find(p=>p.id===id);
+const rand=n=>Math.floor(Math.random()*n);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){let j=rand(i+1),tmp=a[i];a[i]=a[j];a[j]=tmp}return a}
+function flagEmoji(code){
+ code=String(code||"").toUpperCase();
+ if(code.length!==2)return "";
+ return String.fromCodePoint(127397+code.charCodeAt(0),127397+code.charCodeAt(1));
+}
+function countryFlag(country){
+ const codes={"Argentina":"AR","France":"FR","Brazil":"BR","Portugal":"PT","Italy":"IT","Spain":"ES","United States":"US","Mexico":"MX","Germany":"DE","Uruguay":"UY","Belgium":"BE","Netherlands":"NL","Canada":"CA","Nigeria":"NG","South Africa":"ZA","Korea Republic":"KR","Poland":"PL","Chile":"CL"};
+ if(country==="England")return '<span class="englandFlag" aria-label="England"></span>';
+ const code=codes[country];
+ return code?'<span class="flagEmoji" aria-hidden="true">'+flagEmoji(code)+'</span>':'';
+}
+function matchFlag(team){
+ const codes={"Romania":"RO","Argentina":"AR","France":"FR","Senegal":"SN","USA":"US","Spain":"ES","Netherlands":"NL","Belgium":"BE","Japan":"JP","Italy":"IT","Mexico":"MX","Korea Republic":"KR","Uruguay":"UY","Ghana":"GH","Morocco":"MA","Portugal":"PT","Austria":"AT","Switzerland":"CH","Bulgaria":"BG","Germany":"DE","Brazil":"BR","Chile":"CL"};
+ if(team==="England")return '<span class="englandFlag" aria-label="England"></span>';
+ const code=codes[team];
+ return code?'<span class="flagEmoji" aria-hidden="true">'+flagEmoji(code)+'</span>':'';
+}
+function actionIcon(type){
+ const open='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">',close='</svg>';
+ const s='fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+ if(type==="historic")return open+'<path '+s+' d="M4 19V8l8-4 8 4v11M4 10h16M8 19v-5h8v5"/>'+close;
+ if(type==="transfer")return open+'<path '+s+' d="M4 8h13m0 0-3-3m3 3-3 3M20 16H7m0 0 3-3m-3 3 3 3"/>'+close;
+ if(type==="gamechanger")return open+'<rect '+s+' x="5" y="3.5" width="14" height="17" rx="2.5"/><path '+s+' d="m12 7 1.2 2.5 2.8.4-2 2 0.5 2.8-2.5-1.3-2.5 1.3.5-2.8-2-2 2.8-.4L12 7Z"/>'+close;
+ if(type==="jet")return open+'<path '+s+' d="M3 11.5 21 4l-7.4 16-2.3-6.2L3 11.5Z"/><path '+s+' d="m11.3 13.8 4.8-4.9"/>'+close;
+ if(type==="bench")return open+'<path '+s+' d="M6 5v7m12-7v7M4 12h16M6 12v7m12-7v7M7 8h10"/>'+close;
+ if(type==="visiting")return open+'<circle '+s+' cx="12" cy="8" r="3"/><path '+s+' d="M6.5 19c.8-4 2.7-6 5.5-6s4.7 2 5.5 6"/>'+close;
+ if(type==="parking")return open+'<circle '+s+' cx="12" cy="12" r="8"/><path '+s+' d="M10 16V8h3a2.5 2.5 0 0 1 0 5h-3"/>'+close;
+ if(type==="other")return open+'<circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/>'+close;
+ if(type==="go")return open+'<path '+s+' d="M8 4h8v3.5c0 3-1.6 5.3-4 6.2-2.4-.9-4-3.2-4-6.2V4Z"/><path '+s+' d="M8 6H5.5v1.3A4.2 4.2 0 0 0 9 11.4M16 6h2.5v1.3A4.2 4.2 0 0 1 15 11.4M12 13.7V17M9 20h6M10 17h4"/>'+close;
+ return '';
+}
+function avatarSVG(id){
+ const c="#465b4b",bl="#f3d8d7",common='viewBox="0 0 64 64" class="avatarSvg" aria-hidden="true" focusable="false"';
+ const svg=x=>'<svg '+common+' fill="none" xmlns="http://www.w3.org/2000/svg">'+x+'</svg>';
+ const stroke='stroke="'+c+'" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"';
+ const cheeks='<circle cx="21.5" cy="39" r="2.7" fill="'+bl+'"/><circle cx="42.5" cy="39" r="2.7" fill="'+bl+'"/>';
+ const eyes='<path '+stroke+' d="M23 31.2c1.2-1.2 2.7-1.2 3.9 0M37.1 31.2c1.2-1.2 2.7-1.2 3.9 0"/>';
+ const smile='<path '+stroke+' d="M29.5 37.3c1.5 1.2 3.5 1.2 5 0M27.8 42c2.3 2.7 6.1 2.7 8.4 0"/>';
+ const base=(ears,faceExtra,bodyExtra)=>svg('<g '+stroke+'>'+ears+'<path d="M17 34c0-10.1 6.4-17.2 15-17.2S47 23.9 47 34c0 10-6.2 17-15 17S17 44 17 34Z" fill="#fff"/>'+(faceExtra||'')+'</g>'+cheeks+eyes+smile+(bodyExtra||''));
+ if(id==="rabbit")return base('<ellipse cx="23.5" cy="11" rx="5.6" ry="13.5" fill="#fff"/><ellipse cx="40.5" cy="11" rx="5.6" ry="13.5" fill="#fff"/><path d="M23.5 5.5v10M40.5 5.5v10"/>','','<path '+stroke+' d="M27 50.5v4M37 50.5v4"/>');
+ if(id==="panda")return svg('<g '+stroke+'><circle cx="19" cy="19" r="6.3" fill="#fff"/><circle cx="45" cy="19" r="6.3" fill="#fff"/><path d="M17 34c0-10.1 6.4-17.2 15-17.2S47 23.9 47 34c0 10-6.2 17-15 17S17 44 17 34Z" fill="#fff"/><ellipse cx="24.5" cy="31.2" rx="5" ry="5.8" fill="#eef1ec"/><ellipse cx="39.5" cy="31.2" rx="5" ry="5.8" fill="#eef1ec"/></g>'+cheeks+'<circle cx="24.5" cy="31.2" r="1.7" fill="'+c+'"/><circle cx="39.5" cy="31.2" r="1.7" fill="'+c+'"/>'+smile);
+ if(id==="fox")return base('<path d="M18.5 23 14 9.5l13 8.7" fill="#fff"/><path d="M45.5 23 50 9.5l-13 8.7" fill="#fff"/><path d="m17 13 6 5M47 13l-6 5"/>','<path d="M32 35.2c-2.2 0-4-.7-5.2-2.1 1.2 5.6 3 8.4 5.2 8.4s4-2.8 5.2-8.4c-1.2 1.4-3 2.1-5.2 2.1Z" fill="#f8f3e8"/>','');
+ if(id==="bear")return base('<circle cx="19" cy="19" r="6" fill="#fff"/><circle cx="45" cy="19" r="6" fill="#fff"/>','<ellipse cx="32" cy="38" rx="7" ry="5.3" fill="#faf7ef"/>','');
+ if(id==="cat")return base('<path d="M18.5 23 15 10l12 8" fill="#fff"/><path d="M45.5 23 49 10l-12 8" fill="#fff"/>','<path d="M18 37h7M39 37h7M18 41h7M39 41h7"/>','');
+ if(id==="dog")return base('<path d="M20 23 9 15l4.2 15" fill="#fff"/><path d="M44 23 55 15l-4.2 15" fill="#fff"/>','<ellipse cx="32" cy="38.5" rx="6.7" ry="5" fill="#faf7ef"/>','');
+ if(id==="penguin")return svg('<g '+stroke+'><path d="M17.5 37c0-17.1 6.7-27.2 14.5-27.2S46.5 19.9 46.5 37c0 10.9-6.2 17-14.5 17S17.5 47.9 17.5 37Z" fill="#fff"/><path d="M24 26c4-3.2 12-3.2 16 0"/></g>'+cheeks+eyes+'<path d="m32 35-3.6 2.7h7.2Z" fill="'+c+'"/>'+ '<path '+stroke+' d="M28.5 42c2 2 5 2 7 0"/>');
+ return base('<circle cx="19" cy="19.5" r="5.4" fill="#fff"/><circle cx="45" cy="19.5" r="5.4" fill="#fff"/>','<path d="M20 40c3.5 3.2 7.4 4.8 12 4.8S40.5 43.2 44 40"/>','<path '+stroke+' d="M25 51c2.2 2 4.5 3 7 3s4.8-1 7-3"/>');
+}
+function save(){if(state)localStorage.setItem(SAVE_KEY,JSON.stringify(state))}
+function updateUndo(){
+ const b=$("#globalUndo");
+ if(!b)return;
+ b.textContent=T.undo;
+ b.classList.toggle("hidden",!state);
+ b.disabled=!historyStack.length;
+}
+function pushHistory(before){historyStack.push(before);if(historyStack.length>60)historyStack.shift();updateUndo()}
+function undoLast(){
+ if(!historyStack.length)return;
+ state=JSON.parse(historyStack.pop());
+ closeOverlay();
+ actionLocked=false;
+ if(state.phase==="draft")renderDraft();else renderGame();
+ save();updateUndo();
+}
+function closeOverlay(){const o=$("#overlay");if(o){o.classList.add("hidden");o.innerHTML=""}}
+function openOverlay(html){const o=$("#overlay");o.innerHTML=html;o.classList.remove("hidden")}
+function initProfiles(){
+ const defaults=["Jack","Film","Player 3","Player 4"];
+ const old=setupProfiles.slice();
+ setupProfiles=Array.from({length:setupN},(_,i)=>old[i]||{name:defaults[i],avatar:AVATARS[i],token:TOKENS[i].id});
+}
+function renderSetup(){
+ initProfiles();
+ $("#app").innerHTML=`
+ <section class="panel hero">
+  <h1 class="logo"><span class="a">MONOPOLY</span><span class="b">FIFA WORLD CUP 2026</span></h1>
+  <div class="segment">
+   <button data-n="2" class="${setupN===2?"on":""}">${T.people2}</button>
+   <button data-n="3" class="${setupN===3?"on":""}">${T.people3}</button>
+   <button data-n="4" class="${setupN===4?"on":""}">${T.people4}</button>
+  </div>
+  <div id="profileSetup" class="profileSetup"></div>
+  <div class="twoCol">
+   <div class="box"><label class="label">${T.draftSet}</label><select id="poolMode"><option value="16">${T.pool16}</option><option value="100">${T.pool100}</option></select></div>
+   <div class="box"><label class="label">${T.startPoints}</label><input id="startPoints" type="number" min="0" value="20"></div>
+  </div>
+  <div class="help">${T.startHelp}</div>
+  <div class="rowBtns"><button id="startBtn" class="btn">Start</button>${localStorage.getItem(SAVE_KEY)?`<button id="resumeBtn" class="btn secondary">${T.resume}</button>`:""}</div>
+ </section>`;
+ renderProfileSetup();
+ $$(".segment button").forEach(b=>b.onclick=()=>{setupN=+b.dataset.n;renderSetup()});
+ $("#startBtn").onclick=startNew;
+ const r=$("#resumeBtn");if(r)r.onclick=resumeGame;
+ updateUndo();
+}
+function renderProfileSetup(){
+ const used=setupProfiles.map(p=>p.token);
+ $("#profileSetup").innerHTML=setupProfiles.map((sp,i)=>`
+ <div class="profileRow">
+  <div class="box"><label class="label">${T.playerName} ${i+1}</label><input class="setupName" data-i="${i}" value="${esc(sp.name)}"></div>
+  <div class="box"><label class="label">${T.profile}</label><div class="avatarChoices">${AVATARS.map(a=>`<button class="avatarOpt ${sp.avatar===a?"on":""}" data-i="${i}" data-avatar="${a}">${avatarSVG(a)}</button>`).join("")}</div></div>
+  <div class="box"><label class="label">${T.tokenColor}</label><div class="tokenChoices">${TOKENS.map(tok=>`<button class="tokenOpt ${sp.token===tok.id?"on":""} ${(used.includes(tok.id)&&sp.token!==tok.id)?"used":""}" data-i="${i}" data-token="${tok.id}" style="background:${tok.color}" aria-label="${esc(tok.name)}"></button>`).join("")}</div><div class="tokenName">${TOKENS.find(t=>t.id===sp.token).name}</div></div>
+ </div>`).join("");
+ $$(".setupName").forEach(x=>x.oninput=()=>{setupProfiles[+x.dataset.i].name=x.value});
+ $$(".avatarOpt").forEach(x=>x.onclick=()=>{setupProfiles[+x.dataset.i].avatar=x.dataset.avatar;renderProfileSetup()});
+ $$(".tokenOpt").forEach(x=>x.onclick=()=>{const i=+x.dataset.i,t=x.dataset.token;if(setupProfiles.some((p,j)=>j!==i&&p.token===t))return;setupProfiles[i].token=t;renderProfileSetup()});
+}
+function resetAll(){
+ if(!confirm(T.confirmReset))return;
+ localStorage.removeItem(SAVE_KEY);state=null;historyStack=[];actionLocked=false;closeOverlay();renderSetup();
+}
+function startNew(){
+ const profiles=setupProfiles.map((p,i)=>({name:(p.name||("Player "+(i+1))).trim(),avatar:p.avatar,token:p.token}));
+ const pts=Math.max(0,+$("#startPoints").value||20);
+ const mode=$("#poolMode").value;
+ const all=shuffle(PLAYERS.map(p=>p.id));
+ const pool=mode==="16"?all.slice(0,16):all;
+ state={
+  version:8,phase:"draft",n:setupN,startPoints:pts,current:0,draftIndex:0,lastDraftPicker:null,
+  draftPool:pool,reserve:[],reserveActive:{},
+  historic:MATCH_TEMPLATE.map(h=>Object.assign({},h,{owner:null})),
+  wcNumbers:setupN<=3?[1,3,4,5,7]:[1,2,3,4,5,6,7],wcPlayed:[],
+  players:profiles.map(p=>{const tok=TOKENS.find(t=>t.id===p.token);return{name:p.name,avatar:p.avatar,token:p.token,color:tok.color,points:pts,team:[],active:{},wc:[],kept:[],posStatus:"board",benchAttempts:0}}),
+  log:[]
+ };
+ historyStack=[];renderDraft();save();updateUndo();
+}
+function resumeGame(){
+ try{state=JSON.parse(localStorage.getItem(SAVE_KEY));historyStack=[];actionLocked=false;if(state.phase==="draft")renderDraft();else{renderGame();passTo(state.current,true)}}catch(e){localStorage.removeItem(SAVE_KEY);renderSetup()}
+}
+function draftPi(){
+ const n=state.players.length,round=Math.floor(state.draftIndex/n),inside=state.draftIndex%n;
+ return round%2===0?inside:(n-1-inside);
+}
+function playerCardHTML(q,pick,hideStats){
+ return `<div class="playerCard ${pick?"pick":""}" data-id="${q.id}">
+  <div class="name">${esc(q.name)}</div><div class="meta"><span class="flag">${countryFlag(q.country)}</span><span>${esc(q.country)} &middot; ${esc(q.role)}</span></div>
+  ${hideStats?`<div class="hiddenStats">${T.statsHidden}</div>`:`<div class="stats"><div class="stat">R<b>${q.rating}</b></div><div class="stat">A<b>${q.attack}</b></div><div class="stat">D<b>${q.defense}</b></div><div class="stat">S<b>${q.skills}</b></div></div>`}
+ </div>`;
+}
+function renderDraft(){
+ $("#app").innerHTML=`
+ <div class="topbar"><div><div class="title">${T.draftTeam}</div><span id="draftProgress" class="pill"></span></div><div class="tools"><button id="resetBtn" class="btn secondary">${T.newGame}</button></div></div>
+ <div class="draftLayout"><aside class="panel sticky"><div class="small">${T.pickTurn}</div><div id="draftWho" class="draftWho"></div><div id="draftTeams"></div><div class="help">${T.snakeHelp}</div></aside><main id="draftCards" class="cards"></main></div>`;
+ const pi=draftPi(),pl=state.players[pi];
+ $("#draftWho").textContent=pl.name;$("#draftWho").style.color="#111";
+ $("#draftProgress").textContent=(state.draftIndex+1)+"/"+(state.players.length*4)+" - Snake Draft";
+ $("#draftTeams").innerHTML=state.players.map(x=>`<div class="teamMiniLine"><span class="avatarFrame" style="border-color:${x.color}">${avatarSVG(x.avatar)}</span><b>${esc(x.name)}</b><span>${x.team.length}/4</span></div>`).join("");
+ $("#draftCards").innerHTML=state.draftPool.map(id=>playerCardHTML(byId(id),true,true)).join("");
+ $$("#draftCards .pick").forEach(el=>el.onclick=()=>draftPick(+el.dataset.id));
+ $("#resetBtn").onclick=resetAll;
+ updateUndo();
+}
+function draftPick(id){
+ const before=JSON.stringify(state);
+ const pi=draftPi(),pl=state.players[pi];
+ pl.team.push(id);pl.active[id]=true;state.lastDraftPicker=pi;state.draftPool=state.draftPool.filter(x=>x!==id);state.draftIndex++;
+ pushHistory(before);
+ if(state.draftIndex>=state.players.length*4){
+  state.reserve=state.draftPool.slice();state.reserve.forEach(x=>state.reserveActive[x]=true);
+  state.phase="play";state.current=state.lastDraftPicker;
+  state.log.unshift(pl.name+" "+T.startGame);
+  renderGame();save();passTo(state.current,true);
+ }else{renderDraft();save()}
+}
+function renderGame(){
+ const dockPl=state.players[state.current];
+ $("#app").innerHTML=`
+ <div class="turnDock" id="turnDock"><span class="turnDockAvatar" style="border-color:${dockPl.color}">${avatarSVG(dockPl.avatar)}</span><div class="turnDockText"><div class="turnDockLabel">${T.currentPlayer}</div><div class="turnDockName">${esc(dockPl.name)}</div></div><span class="turnDockDot" style="background:${dockPl.color}"></span></div><div class="turnDockSpacer"></div>
+ <div class="topbar"><div><span class="pill" id="wcBadge"></span></div><div class="tools"><button id="undoTop" class="btn secondary">${T.undo}</button><button id="boardBtn" class="btn secondary">${T.board}</button><button id="matchesBtn" class="btn secondary">${T.matches}</button><button id="manageBtn" class="btn secondary">${T.manage}</button><button id="resetBtn" class="btn secondary">${T.newGame}</button></div></div>
+ <div class="gameLayout">
+  <main>
+   <section class="panel turnBox"><div class="turnCaption">${T.currentPlayer}</div><div id="turnName" class="turnName"></div><div class="help">${T.moveHelp}</div><div class="boardNote">${T.historicPreset}</div></section>
+   <div class="actionsGrid">
+    <button class="action" data-act="historic"><span class="tag">${actionIcon("historic")}</span><b>${T.historic}</b><small>${T.historicSub}</small></button>
+    <button class="action" data-act="transfer"><span class="tag">${actionIcon("transfer")}</span><b>${T.transfer}</b><small>${T.transferSub}</small></button>
+    <button class="action" data-act="gamechanger"><span class="tag">${actionIcon("gamechanger")}</span><b>${T.gameChanger}</b><small>${T.gameChangerSub}</small></button>
+    <button class="action" data-act="jet"><span class="tag">${actionIcon("jet")}</span><b>${T.teamJet}</b><small>${T.teamJetSub}</small></button>
+    <button class="action" data-act="bench"><span class="tag">${actionIcon("bench")}</span><b>${T.goBench}</b><small>${T.goBenchSub}</small></button>
+    <button class="action" data-act="visiting"><span class="tag">${actionIcon("visiting")}</span><b>${T.visiting}</b><small>${T.nothing}</small></button>
+    <button class="action" data-act="parking"><span class="tag">${actionIcon("parking")}</span><b>${T.parking}</b><small>${T.nothing}</small></button>
+    <button class="action endTurnAction" data-act="other"><b>${T.other}</b></button>
+    <button class="action goWide" data-act="go"><span class="tag">${actionIcon("go")}</span><b>${T.go}</b><small>${T.goSub}</small></button>
+   </div>
+  </main>
+  <aside class="side">
+   <section class="panel"><div class="sideTitle">${T.pointsStatus}</div><div id="scores" class="scoreList"></div></section>
+   <section class="panel"><div class="sideTitle" id="teamTitle"></div><div id="teamGrid" class="teamGrid"></div><div id="powers" class="powerRow"></div></section>
+   <section class="panel logPanel"><div class="sideTitle">${T.history}</div><div id="log" class="log"></div></section>
+  </aside>
+ </div>`;
+ const pl=state.players[state.current];
+ $("#turnName").innerHTML=`<span class="avatarFrame" style="border-color:${pl.color}">${avatarSVG(pl.avatar)}</span><span>${esc(pl.name)}</span>`;
+ $("#wcBadge").textContent=T.wcLeft+": "+(state.wcNumbers.length-state.wcPlayed.length);
+ renderScores();renderTeam();renderLog();
+ $$("[data-act]").forEach(b=>b.onclick=()=>runAction(b.dataset.act));
+ $("#undoTop").onclick=undoLast;$("#boardBtn").onclick=openBoardReference;$("#matchesBtn").onclick=openMatchList;$("#manageBtn").onclick=openManage;$("#resetBtn").onclick=resetAll;
+ save();updateUndo();
+}
+function renderScores(){
+ $("#scores").innerHTML=state.players.map((pl,i)=>`<div class="score ${i===state.current?"current":""}">
+ <span class="avatarFrame" style="border-color:${pl.color}">${avatarSVG(pl.avatar)}</span>
+ <div><b>${esc(pl.name)}</b><div class="small">${pl.posStatus==="bench"?T.bench+" &middot; ":""}${T.historic} ${state.historic.filter(h=>h.owner===i).length} &middot; WC26 ${pl.wc.length}</div></div>
+ <div class="pts">${pl.points}</div></div>`).join("");
+}
+function renderTeam(){
+ const pl=state.players[state.current];
+ $("#teamTitle").textContent=T.team+" "+pl.name;
+ $("#teamGrid").innerHTML=pl.team.map(id=>{const q=byId(id);return `<div class="miniCard ${pl.active[id]?"":"off"}"><b>${esc(q.name)}</b><div>R${q.rating} A${q.attack} D${q.defense} S${q.skills}</div><div>${pl.active[id]?T.active:T.inactive}</div></div>`}).join("");
+ if(pl.kept.length){
+  $("#powers").innerHTML=pl.kept.map((id,k)=>`<button class="powerBtn" data-k="${k}">${id==="sentoff"?"SENT OFF!":"THE FANS GO WILD!"}</button>`).join("");
+  $$("#powers [data-k]").forEach(b=>b.onclick=()=>useKept(+b.dataset.k));
+ }else $("#powers").innerHTML=`<span class="small">${T.noKept}</span>`;
+}
+function renderLog(){$("#log").innerHTML=state.log.slice(0,100).map(x=>`<div>${esc(x)}</div>`).join("")}
+function addLog(s){state.log.unshift(s);state.log=state.log.slice(0,100)}
+function passTo(pi,initial){
+ const pl=state.players[pi];
+ openOverlay(`<div class="pass"><div class="passBox"><div class="passAvatar" style="border-color:${pl.color}">${avatarSVG(pl.avatar)}</div><div class="small">${initial?T.startGame:T.passPhone}</div><div class="passName">${esc(pl.name)}</div><p>${pl.posStatus==="bench"?T.benchNotice:T.moveHelp}</p><button id="readyBtn" class="btn">${T.ready}</button></div></div>`);
+ $("#readyBtn").onclick=async()=>{closeOverlay();renderGame();if(pl.posStatus==="bench")await benchStart()};
+}
+async function endTurn(){
+ if(state.phase!=="play")return;
+ state.current=(state.current+1)%state.players.length;save();renderGame();passTo(state.current,false);
+}
+async function runAction(type){
+ if(actionLocked||!state||state.phase!=="play")return;
+ if(type==="jet"){await info(T.teamJet,T.jetHelp);return}
+ actionLocked=true;
+ const before=JSON.stringify(state);
+ try{
+  let result={cancelled:false,endTurn:true};
+  if(type==="historic")result=await doHistoric();
+  else if(type==="transfer")result=await doTransfer();
+  else if(type==="gamechanger")result=await doGameChanger();
+  else if(type==="bench"){state.players[state.current].posStatus="bench";state.players[state.current].benchAttempts=0;addLog(state.players[state.current].name+" - "+T.goBench);await info(T.goBench,T.goBenchSub)}
+  else if(type==="visiting")await info(T.visiting,T.nothing);
+  else if(type==="parking")await info(T.parking,T.nothing);
+  else if(type==="other"){}
+  else if(type==="go")result=await doGO();
+  if(result&&result.cancelled){state=JSON.parse(before);closeOverlay();renderGame();save();return}
+  pushHistory(before);
+  if(state.phase==="play"&&(!result||result.endTurn!==false))await endTurn();else{renderGame();save()}
+ }catch(e){
+  console.error(e);state=JSON.parse(before);closeOverlay();renderGame();save();await info(T.error,T.restored)
+ }finally{actionLocked=false}
+}
+function info(title,body){
+ return new Promise(res=>{openOverlay(`<div class="modalBg"><div class="modal"><h2>${esc(title)}</h2><p>${body}</p><div class="modalBtns"><button class="primary" id="infoOk">${T.ok}</button></div></div></div>`);$("#infoOk").onclick=()=>{closeOverlay();res(true)}})
+}
+function choose(title,items,body){
+ return new Promise(res=>{
+  openOverlay(`<div class="modalBg"><div class="modal"><h2>${esc(title)}</h2>${body||""}<div class="choices">${items.map((it,i)=>`<button class="choice" data-i="${i}">${it.html}</button>`).join("")}</div><div class="modalBtns"><button id="chooseCancel">${T.cancel}</button></div></div></div>`);
+  $$(".choice[data-i]").forEach(b=>b.onclick=()=>{const v=items[+b.dataset.i].value;closeOverlay();res(v)});
+  $("#chooseCancel").onclick=()=>{closeOverlay();res(null)};
+ })
+}
+function privatePass(pi,title){
+ return new Promise(res=>{const pl=state.players[pi];openOverlay(`<div class="pass"><div class="passBox"><div class="passAvatar" style="border-color:${pl.color}">${avatarSVG(pl.avatar)}</div><div class="passName">${esc(pl.name)}</div><p>${esc(title)}<br>${T.privateStats}</p><button id="privateReady" class="btn">${T.showMyCards}</button><button id="privateCancel" class="btn secondary" style="margin-left:6px">${T.cancel}</button></div></div>`);$("#privateReady").onclick=()=>{closeOverlay();res(true)};$("#privateCancel").onclick=()=>{closeOverlay();res(false)}})
+}
+function activeIds(pi){
+ const pl=state.players[pi];let ids=pl.team.filter(id=>pl.active[id]);
+ if(!ids.length){pl.team.forEach(id=>pl.active[id]=true);ids=pl.team.slice()}
+ return ids;
+}
+async function choosePlayer(pi,title,used){
+ if(!(await privatePass(pi,title)))return null;
+ const ids=activeIds(pi).filter(id=>!(used||[]).includes(id));
+ return choose(title,ids.map(id=>{const q=byId(id);return{value:id,html:`<b>${esc(q.name)}</b><small>R ${q.rating} &middot; A ${q.attack} &middot; D ${q.defense} &middot; S ${q.skills}</small>`}}));
+}
+async function chooseAnyPlayer(pi,title){
+ if(!(await privatePass(pi,title)))return null;
+ return choose(title,state.players[pi].team.map(id=>{const q=byId(id);return{value:id,html:`<b>${esc(q.name)}</b><small>${state.players[pi].active[id]?T.active:T.inactive} &middot; R${q.rating} A${q.attack} D${q.defense} S${q.skills}</small>`}}));
+}
+function usePlayer(pi,id){
+ const pl=state.players[pi];pl.active[id]=false;
+ if(pl.team.every(x=>!pl.active[x]))pl.team.forEach(x=>pl.active[x]=true);
+}
+async function chooseOpponent(cur,title){
+ return choose(title||T.chooseOpponent,state.players.map((p,i)=>({p,i})).filter(x=>x.i!==cur).map(x=>({value:x.i,html:`<b>${esc(x.p.name)}</b><small>${x.p.points} Points</small>`})));
+}
+function completeSet(owner,color){return state.historic.filter(h=>h.color===color).every(h=>h.owner===owner)}
+function historicParts(h){
+ const parts=String(h.teams||"").split(" vs ");
+ return {a:parts[0]||h.teams,b:parts[1]||""};
+}
+function historicCardHTML(h,interactive){
+ const p=historicParts(h),owner=h.owner==null?T.uncontrolled:state.players[h.owner].name;
+ const setDone=h.owner!=null&&completeSet(h.owner,h.color);
+ return `<${interactive?"button":"div"} class="historicCard" style="--mc:${COLORS[h.color]}" ${interactive?`data-hid="${h.id}"`:""}>
+  <div class="hcTop"><div class="hcYear">${h.year}</div><div class="hcStage">${esc(h.stage)}</div><div class="hcCost"><small>COST</small><b>${h.cost}</b></div></div>
+  <div class="hcMatch"><div class="hcTeams"><div class="hcTeam">${matchFlag(p.a)}<span>${esc(p.a)}</span></div><div class="hcVs">VS</div><div class="hcTeam right"><span>${esc(p.b)}</span>${matchFlag(p.b)}</div></div></div>
+  <div class="hcMeta"><div class="hcStat"><label>${T.bonus}</label><b>${h.bonus}${setDone?" x2":""}</b></div><div class="hcStat"><label>${T.endValue}</label><b>${h.end}${setDone?" x2":""}</b></div><div class="hcStat"><label>${T.owner}</label><b>${esc(owner)}</b></div></div>
+  <div class="hcOwner"><span>FIFA World Cup ${h.year}</span>${setDone?`<span class="hcSet">${T.completeSet}</span>`:""}</div>
+ </${interactive?"button":"div"}>`;
+}
+function historicGridHTML(items,interactive){
+ let last="",html="";
+ items.forEach(h=>{if(h.stage!==last){last=h.stage;html+=`<div class="historicSectionTitle">${esc(h.stage)}</div>`}html+=historicCardHTML(h,interactive)});
+ return html;
+}
+function chooseHistoricMatch(){
+ return new Promise(res=>{
+  const items=state.historic.slice().sort((a,b)=>a.boardPos-b.boardPos);
+  openOverlay(`<div class="modalBg"><div class="historicModal"><div class="historicHero"><div class="historicHeroTop"><div><h2>${T.chooseMatch}</h2><p>${T.historicPreset}</p></div><div class="historicHeroMark">${actionIcon("historic")}</div></div></div><div class="historicBody"><div class="historicGrid">${historicGridHTML(items,true)}</div></div><div class="historicFooter"><button id="historicCancel">${T.cancel}</button></div></div></div>`);
+  $$(".historicCard[data-hid]").forEach(b=>b.onclick=()=>{const id=+b.dataset.hid;closeOverlay();res(id)});
+  $("#historicCancel").onclick=()=>{closeOverlay();res(null)};
+ });
+}
+async function doHistoric(){
+ const h=await chooseHistoricMatch();
+ if(h==null)return{cancelled:true};
+ const m=state.historic.find(x=>x.id===h),cur=state.current;
+ if(m.owner==null){
+  await info(T.historic,`${T.mustBuy}<div class="notice">${esc(m.year+" "+m.stage+" - "+m.teams)}<br>${T.cost} <b>${m.cost}</b> &middot; ${T.bonus} ${m.bonus} &middot; ${T.endValue} ${m.end}</div>`);
+  await payBank(cur,m.cost);m.owner=cur;addLog(state.players[cur].name+" bought "+m.year+" "+m.teams);await info(T.bought,esc(m.year+" "+m.stage+" - "+m.teams));return{endTurn:true}
+ }
+ if(m.owner===cur){await info(T.ownMatch,esc(m.year+" "+m.stage+" - "+m.teams));return{endTurn:true}}
+ const ok=await historicChallenge(m);if(!ok)return{cancelled:true};return{endTurn:true}
+}
+async function payBank(pi,amount){
+ await ensureFunds(pi,amount);
+ state.players[pi].points=Math.max(0,state.players[pi].points-amount);
+}
+async function ensureFunds(pi,amount){
+ while(state.players[pi].points<amount){
+  const owned=state.historic.filter(h=>h.owner===pi);
+  if(!owned.length)break;
+  const id=await choose(T.insufficient,owned.map(h=>({value:h.id,html:`<b>${h.year} ${esc(h.teams)}</b><small>${T.sell} +${h.cost} Points</small>`})));
+  if(id==null)break;
+  const h=state.historic.find(x=>x.id===id);h.owner=null;state.players[pi].points+=h.cost;addLog(state.players[pi].name+" sold "+h.year+" "+h.teams);
+ }
+}
+async function transferPoints(from,to,amount){
+ await ensureFunds(from,amount);
+ const paid=Math.min(amount,state.players[from].points);
+ state.players[from].points-=paid;state.players[to].points+=paid;
+}
+async function historicChallenge(h){
+ const owner=h.owner,vis=state.current;
+ const aid=await choosePlayer(owner,T.chooseAttack);if(aid==null)return false;
+ const did=await choosePlayer(vis,T.chooseDefense);if(did==null)return false;
+ const dice=await specialDice(owner,vis);if(!dice)return false;
+ const A=byId(aid),D=byId(did);let ownerWins=false,explain="";
+ if(dice.g==="ball"&&dice.r!=="glove"){ownerWins=true;explain=T.ball+" = auto win"}
+ else if(dice.r==="glove"){ownerWins=false;explain=(dice.g==="ball"?T.ball+" + ":"")+T.glove+" = visitor win"}
+ else{const at=A.attack+dice.g,de=D.defense+dice.r;ownerWins=at>de;explain=esc(A.name)+": "+A.attack+"+"+dice.g+"="+at+" vs "+esc(D.name)+": "+D.defense+"+"+dice.r+"="+de}
+ usePlayer(owner,aid);usePlayer(vis,did);
+ if(ownerWins){
+  const b=h.bonus*(completeSet(owner,h.color)?2:1);await transferPoints(vis,owner,b);
+  await info(T.ownerWins,explain+`<div class="notice">${esc(state.players[vis].name)} -${b} Points${completeSet(owner,h.color)?" ("+T.completeSet+" x2)":""}</div>`);
+  addLog(state.players[owner].name+" defended "+h.year+" "+h.teams);
+ }else{
+  if(!completeSet(owner,h.color)){h.owner=vis;await info(T.visitorWins,explain+`<div class="notice">${T.visitorTakes}</div>`);addLog(state.players[vis].name+" took "+h.year+" "+h.teams)}
+  else await info(T.visitorWins,explain+`<div class="notice">${T.visitorNoTake}</div>`);
+ }
+ return true;
+}
+function specialDice(owner,visitor){
+ return new Promise(res=>{
+  let g=null,r=null;
+  openOverlay(`<div class="modalBg"><div class="modal"><h2>Historic Match Challenge</h2>
+  <div class="dicePanel green"><div class="diceTitle">${esc(state.players[owner].name)} - ${T.greenRoll}</div><div class="small">${T.chooseRealDie}</div><div class="diceChoices">${[2,3,4,5,6,"BALL"].map(v=>`<button class="dieBtn gd" data-v="${v}">${v==="BALL"?T.ball:v}</button>`).join("")}</div></div>
+  <div class="dicePanel red"><div class="diceTitle">${esc(state.players[visitor].name)} - ${T.redRoll}</div><div class="small">${T.chooseRealDie}</div><div class="diceChoices">${[1,2,3,4,5,"GLOVE"].map(v=>`<button class="dieBtn rd" data-v="${v}">${v==="GLOVE"?T.glove:v}</button>`).join("")}</div></div>
+  <div class="modalBtns"><button id="diceCancel">${T.cancel}</button><button class="primary" id="diceOk" disabled>${T.calculate}</button></div></div></div>`);
+  const sync=()=>$("#diceOk").disabled=(g==null||r==null);
+  $$(".gd").forEach(b=>b.onclick=()=>{g=b.dataset.v==="BALL"?"ball":+b.dataset.v;$$(".gd").forEach(x=>x.classList.remove("on"));b.classList.add("on");sync()});
+  $$(".rd").forEach(b=>b.onclick=()=>{r=b.dataset.v==="GLOVE"?"glove":+b.dataset.v;$$(".rd").forEach(x=>x.classList.remove("on"));b.classList.add("on");sync()});
+  $("#diceCancel").onclick=()=>{closeOverlay();res(null)};
+  $("#diceOk").onclick=async()=>{
+   if(r!=="glove"&&state.players[visitor].kept.includes("fans")){
+    const use=await confirmChoice("THE FANS GO WILD!",T.fansUse);
+    if(use){r="glove";state.players[visitor].kept.splice(state.players[visitor].kept.indexOf("fans"),1)}
+   }
+   closeOverlay();res({g,r});
+  };
+ })
+}
+function confirmChoice(title,body){
+ return new Promise(res=>{openOverlay(`<div class="modalBg"><div class="modal"><h2>${esc(title)}</h2><p>${body}</p><div class="modalBtns"><button id="noBtn">${T.cancel}</button><button class="primary" id="yesBtn">${T.ok}</button></div></div></div>`);$("#noBtn").onclick=()=>{closeOverlay();res(false)};$("#yesBtn").onclick=()=>{closeOverlay();res(true)}})
+}
+async function doTransfer(){
+ const cur=state.current,me=state.players[cur],mine=await chooseAnyPlayer(cur,T.chooseOwnTransfer);if(mine==null)return{cancelled:true};
+ const opts=[];
+ state.players.forEach((pl,i)=>{if(i!==cur)pl.team.forEach(id=>opts.push({kind:"player",owner:i,id}))});
+ state.reserve.forEach(id=>opts.push({kind:"reserve",owner:null,id}));
+ const pick=await choose(T.chooseTargetTransfer,opts.map((o,i)=>{const q=byId(o.id);return{value:i,html:`<b>${esc(q.name)}</b><small>${o.kind==="reserve"?T.reserve:esc(state.players[o.owner].name)} &middot; R${q.rating} A${q.attack} D${q.defense} S${q.skills}</small>`}}));
+ if(pick==null)return{cancelled:true};
+ const o=opts[pick],mineStatus=me.active[mine];
+ if(o.kind==="player"){
+  const other=state.players[o.owner],targetStatus=other.active[o.id];
+  me.team=me.team.map(x=>x===mine?o.id:x);other.team=other.team.map(x=>x===o.id?mine:x);
+  delete me.active[mine];delete other.active[o.id];me.active[o.id]=targetStatus;other.active[mine]=mineStatus;
+ }else{
+  const targetStatus=state.reserveActive[o.id]!==false;
+  me.team=me.team.map(x=>x===mine?o.id:x);delete me.active[mine];me.active[o.id]=targetStatus;
+  state.reserve=state.reserve.filter(x=>x!==o.id);delete state.reserveActive[o.id];state.reserve.push(mine);state.reserveActive[mine]=mineStatus;
+ }
+ addLog(me.name+" Transfer "+byId(mine).name+" <-> "+byId(o.id).name);await info(T.transferDone,T.statusMoves);return{endTurn:true}
+}
+async function doGameChanger(){
+ await info(T.gameChanger,T.drawGC);
+ const gc=await choose(T.whichGC,[
+  {value:"sombrero",html:`<b>THE SOMBRERO FLICK</b><small>Player Rating</small>`},
+  {value:"bicycle",html:`<b>BICYCLE KICK</b><small>Attack</small>`},
+  {value:"zidane",html:`<b>THE ZIDANE ROULETTE</b>`},
+  {value:"bebeto",html:`<b>CELEBRATE LIKE BEBETO!</b>`},
+  {value:"fans",html:`<b>THE FANS GO WILD!</b><small>${T.kept}</small>`},
+  {value:"sentoff",html:`<b>SENT OFF!</b><small>${T.kept}</small>`},
+  {value:"other",html:`<b>${T.otherCard}</b><small>${T.otherCardHelp}</small>`}
+ ]);
+ if(gc==null)return{cancelled:true};
+ if(gc==="sombrero"&&!(await gcSombrero()))return{cancelled:true};
+ if(gc==="bicycle"&&!(await gcBicycle()))return{cancelled:true};
+ if(gc==="zidane"&&!(await gcZidane()))return{cancelled:true};
+ if(gc==="bebeto"&&!(await gcBebeto()))return{cancelled:true};
+ if(gc==="fans"){state.players[state.current].kept.push("fans");await info(T.kept,T.fansUse)}
+ if(gc==="sentoff"){state.players[state.current].kept.push("sentoff");await info(T.kept,"SENT OFF!")}
+ if(gc==="other")await info(T.otherCard,T.otherCardHelp);
+ return{endTurn:true}
+}
+async function gcSombrero(){
+ const vals=[];
+ for(let i=0;i<state.players.length;i++){const id=await choosePlayer(i,"THE SOMBRERO FLICK - Player Rating");if(id==null)return false;vals.push({i,id,v:byId(id).rating});usePlayer(i,id)}
+ const max=Math.max(...vals.map(x=>x.v));let ties=vals.filter(x=>x.v===max).map(x=>x.i),winner;
+ if(ties.length===1)winner=ties[0];else{winner=await multiWhiteTie(ties);if(winner==null)return false}
+ for(let i=0;i<state.players.length;i++)if(i!==winner)await transferPoints(i,winner,1);
+ await info("THE SOMBRERO FLICK",`<div class="notice"><b>${esc(state.players[winner].name)}</b> +1 Point from each opponent</div>`);return true;
+}
+async function gcBicycle(){
+ const cur=state.current,op=await chooseOpponent(cur);if(op==null)return false;
+ const a=await choosePlayer(cur,"BICYCLE KICK - Attack");if(a==null)return false;
+ const b=await choosePlayer(op,"BICYCLE KICK - Attack");if(b==null)return false;
+ const A=byId(a),B=byId(b);let winner;
+ if(A.attack===B.attack){winner=await whiteTie(cur,op);if(winner==null)return false}else winner=A.attack>B.attack?cur:op;
+ usePlayer(cur,a);usePlayer(op,b);state.players[winner].points+=2;
+ await info("BICYCLE KICK",`${esc(A.name)} Attack ${A.attack} vs ${esc(B.name)} Attack ${B.attack}<div class="notice"><b>${esc(state.players[winner].name)}</b> +2 Points</div>`);return true;
+}
+async function gcZidane(){
+ const arr=[];state.players.forEach((pl,i)=>{if(i!==state.current)state.historic.filter(h=>h.owner===i&&!completeSet(i,h.color)).forEach(h=>arr.push(h))});
+ if(!arr.length){state.players[state.current].points+=3;await info("THE ZIDANE ROULETTE","+3 Points");return true}
+ const id=await choose("THE ZIDANE ROULETTE",arr.map(h=>({value:h.id,html:`<b>${h.year} ${esc(h.teams)}</b><small>${T.owner}: ${esc(state.players[h.owner].name)}</small>`})));if(id==null)return false;
+ state.historic.find(h=>h.id===id).owner=state.current;return true;
+}
+async function gcBebeto(){
+ const mine=state.historic.filter(h=>h.owner===state.current&&!completeSet(state.current,h.color)),other=[];
+ state.players.forEach((pl,i)=>{if(i!==state.current)state.historic.filter(h=>h.owner===i&&!completeSet(i,h.color)).forEach(h=>other.push(h))});
+ if(!mine.length||!other.length){state.players[state.current].points+=3;await info("CELEBRATE LIKE BEBETO!","+3 Points");return true}
+ const a=await choose("CELEBRATE LIKE BEBETO!",mine.map(h=>({value:h.id,html:`<b>${h.year} ${esc(h.teams)}</b>`})));if(a==null)return false;
+ const b=await choose("CELEBRATE LIKE BEBETO!",other.map(h=>({value:h.id,html:`<b>${h.year} ${esc(h.teams)}</b><small>${T.owner}: ${esc(state.players[h.owner].name)}</small>`})));if(b==null)return false;
+ const ha=state.historic.find(h=>h.id===a),hb=state.historic.find(h=>h.id===b),ownerB=hb.owner;ha.owner=ownerB;hb.owner=state.current;return true;
+}
+async function useKept(index){
+ if(actionLocked)return;
+ const pl=state.players[state.current],id=pl.kept[index];
+ if(id==="fans"){await info("THE FANS GO WILD!",T.fansUse);return}
+ const before=JSON.stringify(state),op=await chooseOpponent(state.current,T.sentOffUse);if(op==null)return;
+ pl.kept.splice(index,1);state.players[op].posStatus="bench";state.players[op].benchAttempts=0;addLog(state.players[op].name+" - "+T.sentOffDone);pushHistory(before);renderGame();save();
+}
+async function doGO(){
+ const cur=state.current,pl=state.players[cur];pl.points+=4;pl.team.forEach(id=>pl.active[id]=true);addLog(pl.name+" GO +4");
+ await info(T.go,T.goResult);
+ if(state.wcPlayed.length>=state.wcNumbers.length){await finishGame();return{endTurn:false}}
+ const num=state.wcNumbers[state.wcPlayed.length];
+ await info(T.openWC,`${T.expected} <b>${num}</b>`);
+ const ok=await doWorldCup(num);if(!ok)return{cancelled:true};
+ if(state.wcPlayed.length>=state.wcNumbers.length){await finishGame();return{endTurn:false}}
+ return{endTurn:true}
+}
+async function doWorldCup(num){
+ const cur=state.current,op=await chooseOpponent(cur,T.wcChooseOpponent);if(op==null)return false;
+ state.players[cur].team.forEach(id=>state.players[cur].active[id]=true);state.players[op].team.forEach(id=>state.players[op].active[id]=true);
+ const cfg=await worldCupConfig(num);if(!cfg)return false;
+ const mine=[],theirs=[];
+ for(let k=0;k<3;k++){const a=await choosePlayer(cur,"World Cup 26 - "+T.round+" "+(k+1),mine);if(a==null)return false;mine.push(a);const b=await choosePlayer(op,"World Cup 26 - "+T.round+" "+(k+1),theirs);if(b==null)return false;theirs.push(b)}
+ let aw=0,bw=0;const rows=[];
+ for(let k=0;k<3;k++){
+  const qa=byId(mine[k]),qb=byId(theirs[k]),sa=cfg.rounds[k][0],sb=cfg.rounds[k][1],va=qa[sa],vb=qb[sb];
+  if(va>vb)aw++;else if(vb>va)bw++;
+  rows.push(esc(qa.name)+" "+sa+" "+va+" vs "+esc(qb.name)+" "+sb+" "+vb);
+ }
+ let winner;if(aw>bw)winner=cur;else if(bw>aw)winner=op;else{winner=await whiteTie(cur,op);if(winner==null)return false}
+ state.players[cur].team.forEach(id=>state.players[cur].active[id]=true);state.players[op].team.forEach(id=>state.players[op].active[id]=true);
+ state.players[winner].wc.push({number:num,value:cfg.value});state.wcPlayed.push(num);
+ await info("FIFA World Cup 26 #"+num,rows.join("<br>")+`<div class="notice"><b>${esc(state.players[winner].name)}</b> ${T.wcWinner} &middot; ${T.endValue} ${cfg.value}</div>`);
+ addLog(state.players[winner].name+" won WC26 #"+num);return true;
+}
+function worldCupConfig(num){
+ return new Promise(res=>{
+  const opts='<option value="rating">Player Rating</option><option value="attack">Attack</option><option value="defense">Defense</option><option value="skills">Skills</option>';
+  openOverlay(`<div class="modalBg"><div class="modal"><h2>${T.wcRead} #${num}</h2>${[1,2,3].map(i=>`<div class="twoCol"><div><label class="label">${T.round} ${i} - ${T.currentSide}</label><select id="wa${i}">${opts}</select></div><div><label class="label">${T.round} ${i} - ${T.opponent}</label><select id="wb${i}">${opts}</select></div></div>`).join("")}<label class="label" style="margin-top:10px">${T.wcGameEnd}</label><input id="wcValue" type="number" min="0" value="0"><div class="modalBtns"><button id="wcCancel">${T.cancel}</button><button class="primary" id="wcOk">${T.next}</button></div></div></div>`);
+  $("#wcCancel").onclick=()=>{closeOverlay();res(null)};
+  $("#wcOk").onclick=()=>{const rounds=[1,2,3].map(i=>[$("#wa"+i).value,$("#wb"+i).value]),value=Math.max(0,+$("#wcValue").value||0);closeOverlay();res({rounds,value})};
+ })
+}
+function askWhiteDie(title,roller){
+ return new Promise(res=>{openOverlay(`<div class="modalBg"><div class="modal"><h2>${esc(title)}</h2><div class="dicePanel white"><div class="diceTitle">${esc(roller)}</div><div class="small">${T.chooseRealDie}</div><div class="diceChoices">${[1,2,3,4,5,6].map(v=>`<button class="dieBtn wd" data-v="${v}">${v}</button>`).join("")}</div></div><div class="modalBtns"><button id="whiteCancel">${T.cancel}</button></div></div></div>`);$$(".wd").forEach(b=>b.onclick=()=>{const v=+b.dataset.v;closeOverlay();res(v)});$("#whiteCancel").onclick=()=>{closeOverlay();res(null)}})
+}
+async function whiteTie(a,b){
+ const x=await askWhiteDie(T.whiteTie,state.players[a].name);if(x==null)return null;
+ const y=await askWhiteDie(T.whiteTie,state.players[b].name);if(y==null)return null;
+ if(x===y){await info(T.tieAgain,x+" - "+y);return whiteTie(a,b)}
+ return x>y?a:b;
+}
+async function multiWhiteTie(indices){
+ const results=[];
+ for(const i of indices){const r=await askWhiteDie(T.whiteTie,state.players[i].name);if(r==null)return null;results.push({i,r})}
+ const max=Math.max(...results.map(x=>x.r)),top=results.filter(x=>x.r===max).map(x=>x.i);
+ if(top.length>1){await info(T.tieAgain,String(max));return multiWhiteTie(top)}
+ return top[0];
+}
+async function benchStart(){
+ const pi=state.current,pl=state.players[pi],before=JSON.stringify(state);
+ const choice=await choose(T.benchTitle,[
+  {value:"pay",html:`<b>${T.payOne}</b>`},
+  {value:"roll",html:`<b>${T.tryWhite}</b><small>${T.benchAttempts}: ${pl.benchAttempts}/3</small>`}
+ ],`<div class="notice">${T.benchAttempts}: ${pl.benchAttempts}/3</div>`);
+ if(choice==null){passTo(pi,false);return}
+ if(choice==="pay"){
+  await ensureFunds(pi,1);pl.points=Math.max(0,pl.points-1);pl.posStatus="board";pl.benchAttempts=0;pushHistory(before);await info(T.outBench,T.rollMove);renderGame();save();return;
+ }
+ const d=await askWhiteDie(T.tryWhite,pl.name);if(d==null){passTo(pi,false);return}
+ if(d===6){pl.posStatus="board";pl.benchAttempts=0;pushHistory(before);await info(T.rolledSix,T.moveSixEnd);await endTurn();return}
+ pl.benchAttempts++;
+ if(pl.benchAttempts>=3){await ensureFunds(pi,1);pl.points=Math.max(0,pl.points-1);pl.posStatus="board";pl.benchAttempts=0;pushHistory(before);await info(T.thirdFail,T.payMove+" ("+d+")");renderGame();save();return}
+ pushHistory(before);await info(T.benchTitle,T.stayBench+" ("+d+")");await endTurn();
+}
+function openBoardReference(){
+ openOverlay(`<div class="modalBg"><div class="modal"><h2>${T.boardTitle}</h2><p>${T.boardHelp}</p><div class="choices">${BOARD.map((x,i)=>`<div class="choice"><b>${i}. ${esc(x)}</b></div>`).join("")}</div><div class="modalBtns"><button class="primary" id="boardClose">${T.close}</button></div></div></div>`);$("#boardClose").onclick=closeOverlay;
+}
+function openMatchList(){
+ const items=state.historic.slice().sort((a,b)=>a.boardPos-b.boardPos);
+ openOverlay(`<div class="modalBg"><div class="historicModal"><div class="historicHero"><div class="historicHeroTop"><div><h2>${T.matches}</h2><p>${T.historicPreset}</p></div><div class="historicHeroMark">${actionIcon("historic")}</div></div></div><div class="historicBody"><div class="historicGrid">${historicGridHTML(items,false)}</div></div><div class="historicFooter"><button id="matchClose">${T.close}</button></div></div></div>`);$("#matchClose").onclick=closeOverlay;
+}
+function openManage(){
+ openOverlay(`<div class="modalBg"><div class="modal"><h2>${T.manage}</h2><div class="choices">
+ <button class="choice man" data-x="points"><b>${T.managePoints}</b></button>
+ <button class="choice man" data-x="active"><b>${T.manageActive}</b></button>
+ <button class="choice man" data-x="owner"><b>${T.manageOwner}</b></button>
+ <button class="choice man" data-x="final"><b>${T.finalScore}</b></button>
+ </div><div class="modalBtns"><button id="manageClose">${T.close}</button></div></div></div>`);
+ $$(".man").forEach(b=>b.onclick=async()=>{const x=b.dataset.x;closeOverlay();if(x==="points")await manualPoints();if(x==="active")await manualActive();if(x==="owner")await manualOwner();if(x==="final")await finishGame()});
+ $("#manageClose").onclick=closeOverlay;
+}
+async function manualPoints(){
+ const pi=await choose(T.choosePlayer,state.players.map((p,i)=>({value:i,html:`<b>${esc(p.name)}</b><small>${p.points} Points</small>`})));if(pi==null)return;
+ const before=JSON.stringify(state);
+ return new Promise(res=>{openOverlay(`<div class="modalBg"><div class="modal"><h2>${T.managePoints} - ${esc(state.players[pi].name)}</h2><label class="label">${T.pointChange}</label><input id="deltaPts" type="number" value="0"><div class="modalBtns"><button id="mpCancel">${T.cancel}</button><button class="primary" id="mpOk">${T.save}</button></div></div></div>`);$("#mpCancel").onclick=()=>{closeOverlay();res()};$("#mpOk").onclick=()=>{state.players[pi].points=Math.max(0,state.players[pi].points+(+$("#deltaPts").value||0));closeOverlay();pushHistory(before);renderGame();save();res()}})
+}
+async function manualActive(){
+ const pi=await choose(T.choosePlayer,state.players.map((p,i)=>({value:i,html:`<b>${esc(p.name)}</b>`})));if(pi==null)return;
+ const id=await chooseAnyPlayer(pi,T.choosePlayerCard);if(id==null)return;
+ const before=JSON.stringify(state);state.players[pi].active[id]=!state.players[pi].active[id];pushHistory(before);renderGame();save();
+}
+async function manualOwner(){
+ const hid=await choose(T.chooseMatch,state.historic.map(h=>({value:h.id,html:`<b>${h.year} ${esc(h.teams)}</b><small>${T.owner}: ${h.owner==null?T.bank:esc(state.players[h.owner].name)}</small>`})));if(hid==null)return;
+ const opts=[{value:-1,html:`<b>${T.bank}</b>`}].concat(state.players.map((p,i)=>({value:i,html:`<b>${esc(p.name)}</b>`})));
+ const owner=await choose(T.owner,opts);if(owner==null)return;
+ const before=JSON.stringify(state);state.historic.find(h=>h.id===hid).owner=owner<0?null:owner;pushHistory(before);renderGame();save();
+}
+async function finishGame(){
+ const rows=state.players.map((pl,i)=>{const hv=state.historic.filter(h=>h.owner===i).reduce((s,h)=>s+h.end*(completeSet(i,h.color)?2:1),0),wv=pl.wc.reduce((s,x)=>s+(x.value||0),0);return{name:pl.name,chips:pl.points,hv,wv,total:pl.points+hv+wv}}).sort((a,b)=>b.total-a.total);
+ state.phase="ended";save();
+ await new Promise(res=>{openOverlay(`<div class="modalBg"><div class="modal"><h2>${T.finalScore}</h2><table class="table"><tr><th>${T.choosePlayer}</th><th>Chips</th><th>Historic</th><th>WC26</th><th>Total</th></tr>${rows.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${r.chips}</td><td>${r.hv}</td><td>${r.wv}</td><td><b>${r.total}</b></td></tr>`).join("")}</table><div class="notice"><b>${esc(rows[0].name)}</b> ${T.finalHighest}${rows.length>1&&rows[0].total===rows[1].total?"<br>"+T.finalTie:""}</div><div class="modalBtns"><button class="primary" id="finalClose">${T.close}</button></div></div></div>`);$("#finalClose").onclick=()=>{closeOverlay();res()}})
+}
+$("#globalUndo").onclick=undoLast;
+renderSetup();
+</script>
+</body>
+</html>
