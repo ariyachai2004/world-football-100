@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c261c">
+<title>World Football 100 — Companion</title>
+<style>
+:root{
+  --bg:#071711;--panel:#10271e;--panel2:#17382b;--cream:#fff9e8;--ink:#183a2a;
+  --sage:#7a9c77;--sage2:#dfead8;--gold:#f2c85b;--coral:#ee765e;--sky:#66a8e0;
+  --red:#df6268;--green:#69b67b;--muted:#a9beb2;--line:#ffffff16;
+  --p1:#ff6b6b;--p2:#4dabf7;--p3:#ffd43b;--p4:#69db7c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:ui-rounded,"SF Pro Rounded","Noto Sans Thai",system-ui,-apple-system,sans-serif}
+body{background:
+ radial-gradient(circle at 12% 8%,#194c39 0,transparent 28%),
+ radial-gradient(circle at 88% 14%,#173c54 0,transparent 26%),
+ linear-gradient(155deg,#06140f,#0b2118 58%,#06110d);color:#fff}
+button,input,select,textarea{font:inherit}
+button{border:0;cursor:pointer}
+.hidden{display:none!important}
+.app{max-width:1320px;margin:auto;padding:14px}
+.panel{background:#10271eea;border:1px solid var(--line);border-radius:22px;padding:15px;box-shadow:0 14px 36px #0004}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.brand{font-size:22px;font-weight:1000;letter-spacing:-.04em}
+.muted{color:var(--muted);line-height:1.5}.tiny{font-size:11px;color:#789184}
+.hero{max-width:940px;margin:4vh auto;padding:28px;overflow:hidden;position:relative}
+.hero:after{content:"⚽";position:absolute;right:-40px;bottom:-65px;font-size:230px;opacity:.05}
+.hero h1{font-size:clamp(40px,7vw,70px);line-height:.95;letter-spacing:-.05em;margin:8px 0 18px;max-width:760px}
+.kicker{display:none}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;background:#06130e;padding:6px;border-radius:15px;margin:16px 0}
+.seg button{padding:11px;border-radius:10px;background:transparent;color:#bad0c3;font-weight:900}.seg button.on{background:#dcefd7;color:#173c2b}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field{background:#ffffff0a;border:1px solid var(--line);border-radius:14px;padding:9px 11px}
+.field label{display:block;font-size:10px;color:#8fa79a;margin-bottom:4px}.field input,.field select{width:100%;background:transparent;color:#fff;border:0;outline:0;font-weight:850}
+.field select option{color:#111}
+.btn{padding:13px 16px;border-radius:13px;background:linear-gradient(135deg,#f5d36d,#f39c60);color:#2f281a;font-weight:1000}
+.btn2{padding:10px 13px;border-radius:12px;background:#ffffff11;color:#fff;border:1px solid #ffffff1d;font-weight:850}
+.btn3{padding:10px 13px;border-radius:12px;background:#dfead8;color:#173a2a;font-weight:900}
+.danger{background:#5a2428;color:#fff}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:#ffffff10;border:1px solid #ffffff12;color:#ceded5;font-size:11px}
+.draftLayout{display:grid;grid-template-columns:290px 1fr;gap:12px}.sticky{position:sticky;top:10px;height:max-content}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:9px}
+.playerCard{background:linear-gradient(145deg,#fffdf6,#eaf2e5);color:var(--ink);border-radius:17px;padding:10px;border:2px solid #b8c7ae;min-height:190px;position:relative}
+.playerCard.pick:hover{border-color:#efc45d;transform:translateY(-2px)}
+.pcAnimal{font-size:39px}.pcName{font-weight:1000;line-height:1.06}.pcMeta{font-size:11px;color:#607666;margin:4px 0 7px}
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.stat{background:#fff;border:1px solid #c6d1bf;border-radius:8px;text-align:center;padding:4px;font-size:9px}.stat b{display:block;font-size:15px}
+.gameLayout{display:grid;grid-template-columns:1fr 380px;gap:12px}
+.actionsPanel{display:grid;gap:11px}.turnHero{padding:18px;background:linear-gradient(145deg,#173b2c,#0d281d);border-radius:20px;border:1px solid #ffffff17}
+.turnName{font-size:34px;font-weight:1000;letter-spacing:-.05em}
+.actionGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.action{min-height:105px;border-radius:17px;padding:12px;color:#183a2a;background:#fff8e6;text-align:left;border:2px solid #d9d2b5}
+.action .ico{font-size:29px;display:block;margin-bottom:4px}.action b{display:block}.action small{color:#6c786d}
+.action.dark{background:#1e3046;color:#fff;border-color:#2a4666}.action.dark small{color:#b9cadc}
+.action.purple{background:#48295a;color:#fff;border-color:#69437b}.action.purple small{color:#d9c5e5}
+.action.blue{background:#dceeff;border-color:#a7c9ea}.action.red{background:#ffd7d2;border-color:#eeaaa4}.action.green{background:#dff0d9;border-color:#b9d2b1}
+.side{display:grid;gap:10px}.scoreList{display:grid;gap:7px}.score{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:9px;border-radius:14px;background:#ffffff09}.score.current{outline:2px solid var(--gold)}
+.marker{width:33px;height:33px;border-radius:11px;display:grid;place-items:center}.pts{font-size:21px;color:#f5d06b;font-weight:1000}
+.teamGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.mini{background:#fff9e8;color:#183a2a;border-radius:12px;padding:8px;font-size:10px;min-height:82px}.mini.off{opacity:.45;filter:grayscale(.6)}.mini b{display:block;font-size:11px;line-height:1.05}
+.powerRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.power{padding:7px 8px;border-radius:10px;background:#29405a;color:#fff;border:1px solid #ffffff19;font-size:10px}
+.log{font-size:11px;max-height:250px;overflow:auto}.log div{padding:6px 0;border-bottom:1px solid #ffffff0d;color:#c9dbd0}.log strong{color:#fff}
+.pass{position:fixed;inset:0;background:linear-gradient(145deg,#06140f,#12382a);z-index:2000;display:grid;place-items:center;padding:20px;text-align:center}.passBox{max-width:500px}.passIcon{font-size:85px}.passName{font-size:45px;font-weight:1000;letter-spacing:-.05em}
+.modalBg{position:fixed;inset:0;background:#000b;z-index:2100;display:grid;place-items:center;padding:14px}
+.modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:linear-gradient(145deg,#fffdf5,#eaf1e5);color:#173a2a;border-radius:22px;border:2px solid #d5ddc9;padding:18px}
+.modal h2{margin:0 0 8px}.notice{background:#fff1c6;border:1px solid #dfc476;border-radius:12px;padding:10px;margin:8px 0}
+.info{background:#e6f2e2;border:1px solid #bed3b8;border-radius:12px;padding:10px;margin:8px 0}
+.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px}.choice{background:white;color:#173a2a;border:2px solid #bdc9b2;border-radius:13px;padding:9px;text-align:left}.choice:hover{border-color:#e5b95d}.choice .big{font-size:29px}.choice b{display:block}
+.actions{display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px}.actions button{padding:10px 13px;border-radius:11px;background:#dfe9da;color:#173a2a;font-weight:900}.actions .primary{background:#e8bb5d}
+.modal input,.modal select,.modal textarea{width:100%;padding:10px;border:1px solid #bcc9b4;border-radius:10px;background:#fff;color:#173a2a;margin:4px 0 8px}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:8px;border-bottom:1px solid #ccd5c4;text-align:left;font-size:12px}.table th:last-child,.table td:last-child{text-align:right}
+.setGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.setBox{border-radius:13px;padding:10px;background:#fff;border-left:8px solid var(--c)}
+.hint{font-size:11px;color:#718174;line-height:1.5}
+
+.profileSetup{display:grid;gap:12px;margin-top:12px}
+.profileRow{display:grid;grid-template-columns:1.1fr 1.55fr 1fr;gap:9px;align-items:stretch}
+.avatarPicker,.tokenPicker{background:#ffffff08;border:1px solid var(--line);border-radius:14px;padding:9px}
+.avatarPicker label,.tokenPicker label{display:block;font-size:10px;color:#8fa79a;margin-bottom:7px}
+.avatarChoices{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.avatarOpt{height:40px;border-radius:10px;background:#ffffff0b;border:1px solid #ffffff16;display:grid;place-items:center;font-size:22px}
+.avatarOpt.on{outline:2px solid var(--gold);background:#ffffff18}
+.tokenChoices{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.tokenOpt{height:40px;border-radius:10px;border:2px solid #ffffff22;position:relative}
+.tokenOpt.on{outline:3px solid #fff}
+.tokenOpt.used{opacity:.22;pointer-events:none}
+.profileAvatar{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:24px;border:2px solid #ffffffaa;box-shadow:0 7px 15px #0003}
+.dicePanel{border-radius:18px;padding:14px;border:2px solid #d4d8d2;margin-top:9px}
+.dicePanel.white{background:#fffdf5;color:#173a2a}
+.dicePanel.green{background:#dff1df;color:#173a2a;border-color:#7bb78b}
+.dicePanel.red{background:#ffe1de;color:#173a2a;border-color:#e88c85}
+.diceTitle{font-weight:1000;font-size:17px;margin-bottom:4px}
+.diceChoices{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:10px}
+.diceChoice{min-height:52px;border-radius:12px;background:#fff;border:2px solid #c8d0c6;color:#173a2a;font-weight:1000;font-size:20px}
+.dicePanel.green .diceChoice{border-color:#83b893}.dicePanel.red .diceChoice{border-color:#ea9891}
+.globalUndo{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:3000;padding:11px 15px;border-radius:999px;background:#fff;color:#173a2a;border:2px solid #d8c78b;font-weight:1000;box-shadow:0 10px 26px #0007}
+.globalUndo:disabled{opacity:.35}
+
+
+/* v3 — unified clean action tiles */
+.action,
+.action.green,
+.action.dark,
+.action.purple,
+.action.blue,
+.action.red{
+  background:#fff6d8 !important;
+  color:#183a2a !important;
+  border-color:#e3d39a !important;
+}
+.action small,
+.action.green small,
+.action.dark small,
+.action.purple small,
+.action.blue small,
+.action.red small{
+  color:#6c786d !important;
+}
+.action:active{transform:scale(.985)}
+.boardPresetNote{
+  margin-top:8px;padding:9px 11px;border-radius:12px;
+  background:#fff6d8;color:#536256;border:1px solid #e3d39a;
+  font-size:11px;line-height:1.5
+}
+.rollResult{
+  display:inline-flex;align-items:center;gap:7px;margin-top:10px;
+  padding:8px 11px;border-radius:999px;background:#fffdf5;
+  color:#173a2a;border:1px solid #e1d39d;font-size:12px;font-weight:900
+}
+
+@media(max-width:1000px){.gameLayout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.logPanel{grid-column:1/-1}}
+@media(max-width:700px){.profileRow{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.draftLayout{grid-template-columns:1fr}.sticky{position:static}.cards{grid-template-columns:1fr 1fr}.actionGrid{grid-template-columns:1fr 1fr}.side{grid-template-columns:1fr}.setGrid{grid-template-columns:1fr}}
+
+/* =========================================================
+   V4 — BRIGHT LUXURY / CLEAN COMPANION THEME
+   ========================================================= */
+:root{
+  --bg:#f4f1e8;
+  --panel:#fffdf7;
+  --panel2:#f8f4e9;
+  --cream:#fffaf0;
+  --ink:#243127;
+  --sage:#82977d;
+  --sage2:#dfe7dc;
+  --gold:#c9a85d;
+  --coral:#c9826b;
+  --sky:#a9c4d2;
+  --red:#c76567;
+  --green:#7da283;
+  --muted:#6f7b71;
+  --line:#d9d6ca;
+}
+html,body{
+  background:
+    radial-gradient(circle at 10% 0%,#fffdf8 0,transparent 35%),
+    radial-gradient(circle at 90% 8%,#e8eee4 0,transparent 30%),
+    linear-gradient(155deg,#f7f4ec,#eef1e9 58%,#f8f4ec);
+  color:var(--ink);
+}
+.app{max-width:1260px;padding:16px}
+.panel{
+  background:rgba(255,253,247,.92);
+  border:1px solid #d9d6ca;
+  border-radius:24px;
+  box-shadow:0 16px 42px rgba(54,62,51,.10);
+}
+.hero{
+  background:linear-gradient(145deg,rgba(255,253,247,.97),rgba(244,247,239,.95));
+  border:1px solid #d6d4c8;
+  box-shadow:0 24px 70px rgba(63,73,60,.12);
+}
+.hero:after{opacity:.025}
+.hero h1{
+  color:#243127;
+  font-weight:1000;
+  letter-spacing:-.055em;
+}
+.muted{color:#6e786f}
+.tiny{color:#7a847b}
+.seg{
+  background:#ebe8df;
+  border:1px solid #dedacf;
+}
+.seg button{color:#69746b}
+.seg button.on{
+  background:#fffdf7;
+  color:#243127;
+  box-shadow:0 4px 12px rgba(57,65,55,.08);
+}
+.field,.avatarPicker,.tokenPicker{
+  background:#fbf9f2;
+  border:1px solid #dedbd0;
+}
+.field label,.avatarPicker label,.tokenPicker label{color:#788279}
+.field input,.field select{
+  color:#243127;
+}
+.field select option{color:#243127;background:#fff}
+.avatarOpt{
+  background:#fffdf8;
+  border:1px solid #d9d6cb;
+}
+.avatarOpt.on{
+  outline:2px solid #c8a860;
+  background:#fff8df;
+}
+.btn{
+  background:linear-gradient(135deg,#d8bf7a,#bfa15f);
+  color:#fffdf7;
+  box-shadow:0 9px 22px rgba(166,137,74,.20);
+}
+.btn2{
+  background:#fffdf7;
+  color:#314137;
+  border:1px solid #d8d6cc;
+}
+.btn2:hover{background:#f6f3ea}
+.btn3{
+  background:#e9efe5;
+  color:#304137;
+}
+.badge{
+  background:#f3efe5;
+  border:1px solid #ddd8cb;
+  color:#68746b;
+}
+.turnHero{
+  background:linear-gradient(145deg,#fffdf7,#f0f4ec);
+  border:1px solid #d8dbd2;
+  color:#243127;
+  box-shadow:0 12px 30px rgba(54,63,52,.08);
+}
+.turnName{color:#243127!important}
+.boardPresetNote{
+  background:#f6f0dd;
+  color:#6d6757;
+  border:1px solid #dfd1a3;
+}
+.action,
+.action.green,
+.action.dark,
+.action.purple,
+.action.blue,
+.action.red{
+  background:#fff7dc!important;
+  color:#27342b!important;
+  border:1px solid #dfd2a8!important;
+  box-shadow:0 8px 20px rgba(77,70,47,.06);
+}
+.action:hover{
+  background:#fff2c7!important;
+  border-color:#d0bc7e!important;
+}
+.action small,
+.action.green small,
+.action.dark small,
+.action.purple small,
+.action.blue small,
+.action.red small{
+  color:#73786f!important;
+}
+.score{
+  background:#faf8f1;
+  border:1px solid #e0ddd3;
+}
+.score.current{
+  outline:2px solid #c8a85f;
+  background:#fffaf0;
+}
+.pts{color:#9d7d39}
+.mini{
+  background:#fffdf6;
+  color:#243127;
+  border:1px solid #dedbd0;
+}
+.power{
+  background:#e9efe5;
+  color:#304137;
+  border:1px solid #d3ddd0;
+}
+.log div{
+  color:#667269;
+  border-bottom:1px solid #e7e3da;
+}
+.log strong{color:#26342b}
+.modalBg{
+  background:rgba(34,41,35,.32);
+  backdrop-filter:blur(10px);
+}
+.modal{
+  background:linear-gradient(145deg,#fffef9,#f6f7f1);
+  color:#243127;
+  border:1px solid #d8d7cf;
+  box-shadow:0 30px 90px rgba(48,55,47,.20);
+}
+.notice{
+  background:#fff3cd;
+  border:1px solid #dfca8f;
+}
+.info{
+  background:#edf3e9;
+  border:1px solid #cfdcc9;
+}
+.choice{
+  background:#fffdf8;
+  color:#26372d;
+  border:1px solid #d9d8ce;
+}
+.choice:hover{
+  border-color:#c7a85f;
+  background:#fff9e9;
+}
+.actions button{
+  background:#e8eee4;
+  color:#2b3c31;
+}
+.actions .primary{
+  background:#cfb16b;
+  color:#fff;
+}
+.pass{
+  background:
+    radial-gradient(circle at 50% 10%,#ffffff 0,transparent 32%),
+    linear-gradient(145deg,#f6f3ea,#e9eee6);
+}
+.passName{color:#29372e!important}
+.profileAvatar{
+  border:2px solid rgba(255,255,255,.9);
+  box-shadow:0 8px 18px rgba(51,62,52,.14);
+}
+.globalUndo{
+  background:#fffdf8;
+  color:#314137;
+  border:1px solid #d6c99b;
+  box-shadow:0 10px 25px rgba(68,69,51,.12);
+}
+.dicePanel.white{
+  background:#fffef8;
+  border-color:#d8d5c8;
+}
+.dicePanel.green{
+  background:#edf5eb;
+  border-color:#9eb8a0;
+}
+.dicePanel.red{
+  background:#fae9e6;
+  border-color:#d89a94;
+}
+.diceChoice{
+  background:#fff;
+  color:#26372d;
+  border:1px solid #d4d4cb;
+  box-shadow:0 5px 12px rgba(54,64,54,.06);
+}
+.dicePanel.green .diceChoice{border-color:#a9c2aa}
+.dicePanel.red .diceChoice{border-color:#dea8a3}
+.table th,.table td{border-bottom:1px solid #e1ded5}
+.setBox{background:#fffdf8;border:1px solid #dedbd0}
+@media(max-width:700px){
+  .app{padding:10px}
+  .panel{border-radius:20px}
+  .hero{margin:2vh auto;padding:20px}
+  .hero h1{font-size:clamp(34px,11vw,55px)}
+}
+
+
+/* V4.1 — GO / World Cup 26 is the final full-width action */
+.actionGrid .goWide{
+  grid-column:1 / -1;
+  min-height:118px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+}
+.actionGrid .goWide .ico{font-size:34px}
+.actionGrid .goWide b{font-size:20px}
+@media(max-width:700px){
+  .actionGrid .goWide{grid-column:1 / -1;min-height:112px}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<section id="setup" class="panel hero">
+  <h1>MONOPOLY FIFA WORLD CUP</h1>
+  <p class="muted" style="max-width:640px;margin:0 0 14px">Companion สำหรับใช้คู่กับกระดานจริง</p>
+  <div class="seg"><button class="on" data-n="2">2 คน</button><button data-n="3">3 คน</button><button data-n="4">4 คน</button></div>
+  <div id="profileSetup" class="profileSetup"></div>
+  <div class="formgrid" style="margin-top:8px">
+    <div class="field"><label>ชุดนักเตะสำหรับ Draft</label><select id="poolMode"><option value="16">สุ่ม 16 ใบ — ใกล้กล่องจริง</option><option value="100">ครบ 100 ใบ — Expansion</option></select></div>
+    <div class="field"><label>คะแนนเริ่มต้น</label><input id="startPoints" type="number" value="20" min="0"></div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:13px">
+    <button id="startBtn" class="btn">Start</button>
+    <button id="resumeBtn" class="btn2 hidden">เล่นเกมที่บันทึกไว้ต่อ</button>
+  </div>
+  <p class="tiny">ค่าเริ่มต้น 20 Points = เหรียญ 1 จำนวน 5 เหรียญ, เหรียญ 5 จำนวน 3 เหรียญ • สำหรับ 2–3 คน ระบบจะใช้ World Cup 26 หมายเลข 1, 3, 4, 5, 7</p>
+</section>
+
+<section id="draft" class="hidden">
+  <div class="top">
+    <div><div class="brand">Draft ทีม</div><span id="draftProgress" class="badge"></span></div>
+    <button class="btn2" onclick="resetAll()">เริ่มใหม่</button>
+  </div>
+  <div class="draftLayout" style="margin-top:10px">
+    <aside class="panel sticky">
+      <div class="muted" style="font-size:11px">ถึงคิวเลือกของ</div>
+      <div id="draftWho" style="font-size:29px;font-weight:1000;margin:5px 0"></div>
+      <div id="draftTeams"></div>
+      <p class="hint">Snake Draft สลับกันเลือกนักเตะ เมื่อนักเตะครบทีมแล้ว ผู้เล่นที่เลือกใบที่ 4 เป็นคนสุดท้ายจะเริ่มเกม</p>
+    </aside>
+    <main id="draftCards" class="cards"></main>
+  </div>
+</section>
+
+<section id="game" class="hidden">
+  <div class="top">
+    <div><div class="brand">⚽ World Football 100 Companion</div><span id="wcBadge" class="badge"></span></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap"><button id="undoTop" class="btn2">↶ ย้อนกลับ</button><button id="matchesBtn" class="btn2">Historic Matches</button><button id="manualBtn" class="btn2">จัดการเกม</button><button class="btn2" onclick="resetAll()">เกมใหม่</button></div>
+  </div>
+  <div class="gameLayout" style="margin-top:9px">
+    <main class="actionsPanel">
+      <div class="turnHero">
+        <div class="muted" style="font-size:11px">ผู้เล่นปัจจุบัน</div>
+        <div id="turnName" class="turnName"></div>
+        <p class="muted" style="margin:5px 0 0">ทอยลูกเต๋าสีขาว เดินหมากบนกระดาน แล้วเลือกช่องที่ตก</p>
+        <div class="boardPresetNote">Historic Match ทั้ง 16 ช่องถูกใส่ตามกระดานจริงแล้ว เลือกชื่อ Match ได้ทันที</div>
+      </div>
+      <div class="actionGrid">
+        <button class="action" data-act="historic"><span class="ico">🏟️</span><b>Historic Match</b><small>ซื้อบังคับ หรือ Challenge เจ้าของ</small></button>
+        <button class="action purple" data-act="transfer"><span class="ico">🔄</span><b>Transfer</b><small>แลกนักเตะกับคู่แข่งหรือกองสำรอง</small></button>
+        <button class="action dark" data-act="gamechanger"><span class="ico">🎴</span><b>Game Changer</b><small>จั่วการ์ดจริง แล้วเลือกชื่อการ์ดในเว็บ</small></button>
+        <button class="action blue" data-act="jet"><span class="ico">✈️</span><b>Team Jet</b><small>ย้ายหมากจริงไปช่องก่อน Team Jet ถัดไป</small></button>
+        <button class="action red" data-act="bench"><span class="ico">🪑</span><b>Go to the Bench</b><small>ส่งหมากไป Bench โดยไม่รับผล GO</small></button>
+        <button class="action" data-act="transit"><span class="ico">🚏</span><b>Transit / Visiting</b><small>ไม่มีอะไรเกิดขึ้น</small></button>
+        <button class="action" data-act="parking"><span class="ico">🅿️</span><b>Free Parking</b><small>ไม่มีอะไรเกิดขึ้น</small></button>
+        <button class="action" data-act="other"><span class="ico">✅</span><b>จบตา / ช่องอื่น</b><small>ไม่มี Action เพิ่ม แล้วส่งให้คนถัดไป</small></button>
+        <button class="action goWide" data-act="go"><span class="ico">🏁</span><b>GO / World Cup 26</b><small>หยุดที่ GO, +4, Reactivate, เปิดการ์ดจริง</small></button>
+      </div>
+    </main>
+    <aside class="side">
+      <div class="panel"><b>Points / Status</b><div id="scores" class="scoreList" style="margin-top:8px"></div></div>
+      <div class="panel"><b id="teamTitle">ทีม</b><div id="teamGrid" class="teamGrid" style="margin-top:8px"></div><div id="powers" class="powerRow"></div></div>
+      <div class="panel logPanel"><b>บันทึก</b><div id="log" class="log"></div></div>
+    </aside>
+  </div>
+</section>
+</div>
+<button id="globalUndo" class="globalUndo hidden">↶ ย้อนกลับ</button>
+<div id="overlay"></div>
+
+<script>
+const P=[{"id": 1, "name": "Lionel Messi", "country": "Argentina", "role": "FW / AM", "rating": 95, "attack": 94, "defense": 78, "skills": 95, "best": "Skills", "accuracy": "Verified", "animal": "🦊", "flag": "🇦🇷"}, {"id": 2, "name": "Lautaro Martínez", "country": "Argentina", "role": "ST", "rating": 89, "attack": 93, "defense": 78, "skills": 84, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐰", "flag": "🇦🇷"}, {"id": 3, "name": "Diego Maradona", "country": "Argentina", "role": "AM / FW", "rating": 95, "attack": 94, "defense": 76, "skills": 96, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐼", "flag": "🇦🇷"}, {"id": 4, "name": "Gabriel Batistuta", "country": "Argentina", "role": "ST", "rating": 92, "attack": 96, "defense": 78, "skills": 86, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🇦🇷"}, {"id": 5, "name": "Javier Zanetti", "country": "Argentina", "role": "RB / DM", "rating": 91, "attack": 84, "defense": 94, "skills": 88, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐻", "flag": "🇦🇷"}, {"id": 6, "name": "Sergio Agüero", "country": "Argentina", "role": "ST", "rating": 92, "attack": 95, "defense": 75, "skills": 91, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦦", "flag": "🇦🇷"}, {"id": 7, "name": "Kylian Mbappé", "country": "France", "role": "ST / LW", "rating": 92, "attack": 91, "defense": 74, "skills": 90, "best": "Attack", "accuracy": "Verified", "animal": "🐶", "flag": "🇫🇷"}, {"id": 8, "name": "Franck Ribéry", "country": "France", "role": "LW", "rating": 91, "attack": 90, "defense": 75, "skills": 94, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🦌", "flag": "🇫🇷"}, {"id": 9, "name": "Zinedine Zidane", "country": "France", "role": "AM / CM", "rating": 94, "attack": 91, "defense": 82, "skills": 95, "best": "Skills", "accuracy": "Partially verified + proxy", "animal": "🐧", "flag": "🇫🇷"}, {"id": 10, "name": "Robert Pirès", "country": "France", "role": "LW / AM", "rating": 88, "attack": 88, "defense": 76, "skills": 90, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇫🇷"}, {"id": 11, "name": "Warren Zaïre-Emery", "country": "France", "role": "CM", "rating": 84, "attack": 82, "defense": 84, "skills": 86, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🦊", "flag": "🇫🇷"}, {"id": 12, "name": "David Trezeguet", "country": "France", "role": "ST", "rating": 89, "attack": 94, "defense": 76, "skills": 82, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐰", "flag": "🇫🇷"}, {"id": 13, "name": "Michel Platini", "country": "France", "role": "AM", "rating": 94, "attack": 93, "defense": 78, "skills": 95, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐼", "flag": "🇫🇷"}, {"id": 14, "name": "Vini Jr.", "country": "Brazil", "role": "LW", "rating": 91, "attack": 91, "defense": 73, "skills": 93, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🇧🇷"}, {"id": 15, "name": "Neymar Jr.", "country": "Brazil", "role": "LW / AM", "rating": 95, "attack": 92, "defense": 78, "skills": 92, "best": "Attack / Skills", "accuracy": "Verified", "animal": "🐻", "flag": "🇧🇷"}, {"id": 16, "name": "Pelé", "country": "Brazil", "role": "FW / AM", "rating": 95, "attack": 94, "defense": 78, "skills": 95, "best": "Skills", "accuracy": "Verified", "animal": "🦦", "flag": "🇧🇷"}, {"id": 17, "name": "Roberto Carlos", "country": "Brazil", "role": "LB", "rating": 92, "attack": 88, "defense": 92, "skills": 91, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐶", "flag": "🇧🇷"}, {"id": 18, "name": "Ronaldo", "country": "Brazil", "role": "ST", "rating": 95, "attack": 93, "defense": 79, "skills": 95, "best": "Skills", "accuracy": "Verified", "animal": "🦌", "flag": "🇧🇷"}, {"id": 19, "name": "Kaká", "country": "Brazil", "role": "AM", "rating": 92, "attack": 91, "defense": 78, "skills": 94, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐧", "flag": "🇧🇷"}, {"id": 20, "name": "Bebeto", "country": "Brazil", "role": "ST / SS", "rating": 89, "attack": 92, "defense": 76, "skills": 88, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇧🇷"}, {"id": 21, "name": "Rivaldo", "country": "Brazil", "role": "AM / FW", "rating": 92, "attack": 93, "defense": 76, "skills": 93, "best": "Attack / Skills", "accuracy": "Proxy estimate", "animal": "🦊", "flag": "🇧🇷"}, {"id": 22, "name": "Harry Kane", "country": "England", "role": "ST", "rating": 89, "attack": 96, "defense": 80, "skills": 77, "best": "Attack", "accuracy": "Verified", "animal": "🐰", "flag": "🏴"}, {"id": 23, "name": "Steven Gerrard", "country": "England", "role": "CM", "rating": 92, "attack": 90, "defense": 91, "skills": 90, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐼", "flag": "🏴"}, {"id": 24, "name": "Paul Scholes", "country": "England", "role": "CM", "rating": 91, "attack": 88, "defense": 88, "skills": 94, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🏴"}, {"id": 25, "name": "Ollie Watkins", "country": "England", "role": "ST", "rating": 84, "attack": 88, "defense": 75, "skills": 80, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐻", "flag": "🏴"}, {"id": 26, "name": "Michael Owen", "country": "England", "role": "ST", "rating": 90, "attack": 94, "defense": 74, "skills": 88, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦦", "flag": "🏴"}, {"id": 27, "name": "Wayne Rooney", "country": "England", "role": "FW / AM", "rating": 92, "attack": 94, "defense": 83, "skills": 90, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐶", "flag": "🏴"}, {"id": 28, "name": "Pepe", "country": "Portugal", "role": "CB", "rating": 90, "attack": 78, "defense": 95, "skills": 80, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🦌", "flag": "🇵🇹"}, {"id": 29, "name": "Phil Foden", "country": "England", "role": "AM / RW", "rating": 88, "attack": 87, "defense": 74, "skills": 91, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐧", "flag": "🏴"}, {"id": 30, "name": "Gonçalo Ramos", "country": "Portugal", "role": "ST", "rating": 83, "attack": 87, "defense": 74, "skills": 78, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇵🇹"}, {"id": 31, "name": "Luís Figo", "country": "Portugal", "role": "RW / AM", "rating": 93, "attack": 92, "defense": 77, "skills": 95, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🦊", "flag": "🇵🇹"}, {"id": 32, "name": "Ricardo Carvalho", "country": "Portugal", "role": "CB", "rating": 89, "attack": 77, "defense": 94, "skills": 81, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐰", "flag": "🇵🇹"}, {"id": 33, "name": "Bernardo Silva", "country": "Portugal", "role": "AM / RW", "rating": 89, "attack": 86, "defense": 78, "skills": 93, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐼", "flag": "🇵🇹"}, {"id": 34, "name": "Alessandro Nesta", "country": "Italy", "role": "CB", "rating": 93, "attack": 78, "defense": 96, "skills": 84, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🇮🇹"}, {"id": 35, "name": "Federico Chiesa", "country": "Italy", "role": "RW / LW", "rating": 86, "attack": 88, "defense": 73, "skills": 87, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐻", "flag": "🇮🇹"}, {"id": 36, "name": "Fabio Cannavaro", "country": "Italy", "role": "CB", "rating": 93, "attack": 76, "defense": 97, "skills": 84, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🦦", "flag": "🇮🇹"}, {"id": 37, "name": "Paolo Maldini", "country": "Italy", "role": "CB / LB", "rating": 95, "attack": 82, "defense": 98, "skills": 90, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐶", "flag": "🇮🇹"}, {"id": 38, "name": "Claudio Marchisio", "country": "Italy", "role": "CM", "rating": 88, "attack": 87, "defense": 88, "skills": 89, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🦌", "flag": "🇮🇹"}, {"id": 39, "name": "Alessandro Del Piero", "country": "Italy", "role": "SS / AM", "rating": 94, "attack": 88, "defense": 81, "skills": 92, "best": "Skills", "accuracy": "Verified", "animal": "🐧", "flag": "🇮🇹"}, {"id": 40, "name": "Xabi Alonso", "country": "Spain", "role": "DM / CM", "rating": 92, "attack": 86, "defense": 93, "skills": 94, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇪🇸"}, {"id": 41, "name": "Lamine Yamal", "country": "Spain", "role": "RW", "rating": 85, "attack": 84, "defense": 71, "skills": 82, "best": "Attack", "accuracy": "Verified", "animal": "🦊", "flag": "🇪🇸"}, {"id": 42, "name": "David Silva", "country": "Spain", "role": "AM / CM", "rating": 91, "attack": 88, "defense": 79, "skills": 95, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐰", "flag": "🇪🇸"}, {"id": 43, "name": "Andrés Iniesta", "country": "Spain", "role": "CM / AM", "rating": 94, "attack": 89, "defense": 85, "skills": 97, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐼", "flag": "🇪🇸"}, {"id": 44, "name": "David Villa", "country": "Spain", "role": "ST / LW", "rating": 91, "attack": 94, "defense": 76, "skills": 89, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🇪🇸"}, {"id": 45, "name": "Sergio Busquets", "country": "Spain", "role": "DM", "rating": 92, "attack": 80, "defense": 96, "skills": 92, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐻", "flag": "🇪🇸"}, {"id": 46, "name": "Gerard Piqué", "country": "Spain", "role": "CB", "rating": 91, "attack": 81, "defense": 95, "skills": 88, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🦦", "flag": "🇪🇸"}, {"id": 47, "name": "Christian Pulisic", "country": "United States", "role": "RW / LW", "rating": 86, "attack": 83, "defense": 75, "skills": 81, "best": "Attack", "accuracy": "Verified", "animal": "🐶", "flag": "🇺🇸"}, {"id": 48, "name": "Landon Donovan", "country": "United States", "role": "FW / AM", "rating": 87, "attack": 88, "defense": 78, "skills": 86, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦌", "flag": "🇺🇸"}, {"id": 49, "name": "Claudio Reyna", "country": "United States", "role": "CM", "rating": 84, "attack": 82, "defense": 85, "skills": 87, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐧", "flag": "🇺🇸"}, {"id": 50, "name": "Weston McKennie", "country": "United States", "role": "CM", "rating": 84, "attack": 82, "defense": 88, "skills": 83, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇺🇸"}, {"id": 51, "name": "Clint Dempsey", "country": "United States", "role": "FW / AM", "rating": 86, "attack": 89, "defense": 78, "skills": 85, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦊", "flag": "🇺🇸"}, {"id": 52, "name": "Antonee Robinson", "country": "United States", "role": "LB", "rating": 83, "attack": 81, "defense": 87, "skills": 85, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐰", "flag": "🇺🇸"}, {"id": 53, "name": "Carlos Vela", "country": "Mexico", "role": "RW / SS", "rating": 86, "attack": 88, "defense": 74, "skills": 89, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐼", "flag": "🇲🇽"}, {"id": 54, "name": "Pável Pardo", "country": "Mexico", "role": "DM / CM", "rating": 84, "attack": 80, "defense": 88, "skills": 86, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🇲🇽"}, {"id": 55, "name": "Andrés Guardado", "country": "Mexico", "role": "CM / LM", "rating": 85, "attack": 83, "defense": 87, "skills": 88, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐻", "flag": "🇲🇽"}, {"id": 56, "name": "Hugo Sánchez", "country": "Mexico", "role": "ST", "rating": 92, "attack": 97, "defense": 75, "skills": 89, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦦", "flag": "🇲🇽"}, {"id": 57, "name": "Rafael Márquez", "country": "Mexico", "role": "CB / DM", "rating": 90, "attack": 82, "defense": 94, "skills": 87, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐶", "flag": "🇲🇽"}, {"id": 58, "name": "Raúl Jiménez", "country": "Mexico", "role": "ST", "rating": 84, "attack": 88, "defense": 76, "skills": 80, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦌", "flag": "🇲🇽"}, {"id": 59, "name": "Thomas Müller", "country": "Germany", "role": "SS / AM", "rating": 91, "attack": 93, "defense": 82, "skills": 88, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐧", "flag": "🇩🇪"}, {"id": 60, "name": "Franz Beckenbauer", "country": "Germany", "role": "CB / DM", "rating": 95, "attack": 86, "defense": 97, "skills": 95, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇩🇪"}, {"id": 61, "name": "Philipp Lahm", "country": "Germany", "role": "RB / DM", "rating": 93, "attack": 84, "defense": 96, "skills": 94, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🦊", "flag": "🇩🇪"}, {"id": 62, "name": "Miroslav Klose", "country": "Germany", "role": "ST", "rating": 90, "attack": 95, "defense": 77, "skills": 84, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐰", "flag": "🇩🇪"}, {"id": 63, "name": "Paul Breitner", "country": "Germany", "role": "LB / CM", "rating": 91, "attack": 88, "defense": 93, "skills": 91, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐼", "flag": "🇩🇪"}, {"id": 64, "name": "Lothar Matthäus", "country": "Germany", "role": "CM / DM", "rating": 95, "attack": 92, "defense": 96, "skills": 94, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🇩🇪"}, {"id": 65, "name": "Federico Valverde", "country": "Uruguay", "role": "CM", "rating": 89, "attack": 88, "defense": 91, "skills": 90, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐻", "flag": "🇺🇾"}, {"id": 66, "name": "Eden Hazard", "country": "Belgium", "role": "LW / AM", "rating": 92, "attack": 91, "defense": 74, "skills": 96, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🦦", "flag": "🇧🇪"}, {"id": 67, "name": "Luis Suárez", "country": "Uruguay", "role": "ST", "rating": 94, "attack": 97, "defense": 80, "skills": 92, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐶", "flag": "🇺🇾"}, {"id": 68, "name": "Diego Forlán", "country": "Uruguay", "role": "ST / AM", "rating": 90, "attack": 94, "defense": 78, "skills": 89, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦌", "flag": "🇺🇾"}, {"id": 69, "name": "Enzo Francescoli", "country": "Uruguay", "role": "AM / SS", "rating": 91, "attack": 90, "defense": 77, "skills": 94, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐧", "flag": "🇺🇾"}, {"id": 70, "name": "Edinson Cavani", "country": "Uruguay", "role": "ST", "rating": 90, "attack": 95, "defense": 82, "skills": 86, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇺🇾"}, {"id": 71, "name": "Timothy Weah", "country": "United States", "role": "RW / ST", "rating": 82, "attack": 84, "defense": 72, "skills": 82, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦊", "flag": "🇺🇸"}, {"id": 72, "name": "Patrick Kluivert", "country": "Netherlands", "role": "ST", "rating": 89, "attack": 94, "defense": 76, "skills": 85, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐰", "flag": "🇳🇱"}, {"id": 73, "name": "Marco van Basten", "country": "Netherlands", "role": "ST", "rating": 95, "attack": 98, "defense": 78, "skills": 93, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐼", "flag": "🇳🇱"}, {"id": 74, "name": "Dennis Bergkamp", "country": "Netherlands", "role": "SS / AM", "rating": 93, "attack": 91, "defense": 76, "skills": 97, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🇳🇱"}, {"id": 75, "name": "Ruud Gullit", "country": "Netherlands", "role": "CM / FW", "rating": 95, "attack": 94, "defense": 94, "skills": 96, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐻", "flag": "🇳🇱"}, {"id": 76, "name": "Robin van Persie", "country": "Netherlands", "role": "ST", "rating": 89, "attack": 87, "defense": 73, "skills": 87, "best": "Attack / Skills", "accuracy": "Verified", "animal": "🦦", "flag": "🇳🇱"}, {"id": 77, "name": "Julian De Guzman", "country": "Canada", "role": "CM / DM", "rating": 82, "attack": 80, "defense": 84, "skills": 84, "best": "Defense / Skills", "accuracy": "Proxy estimate", "animal": "🐶", "flag": "🇨🇦"}, {"id": 78, "name": "Alphonso Davies", "country": "Canada", "role": "LB / LW", "rating": 86, "attack": 88, "defense": 89, "skills": 92, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🦌", "flag": "🇨🇦"}, {"id": 79, "name": "Victor Moses", "country": "Nigeria", "role": "RW / RWB", "rating": 83, "attack": 84, "defense": 83, "skills": 85, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐧", "flag": "🇳🇬"}, {"id": 80, "name": "Benni McCarthy", "country": "South Africa", "role": "ST", "rating": 85, "attack": 89, "defense": 76, "skills": 82, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇿🇦"}, {"id": 81, "name": "John Obi Mikel", "country": "Nigeria", "role": "DM / CM", "rating": 86, "attack": 78, "defense": 93, "skills": 86, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🦊", "flag": "🇳🇬"}, {"id": 82, "name": "Jay-Jay Okocha", "country": "Nigeria", "role": "AM", "rating": 90, "attack": 88, "defense": 73, "skills": 97, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐰", "flag": "🇳🇬"}, {"id": 83, "name": "Heung-min Son", "country": "Korea Republic", "role": "LW / ST", "rating": 88, "attack": 87, "defense": 74, "skills": 84, "best": "Attack", "accuracy": "Verified", "animal": "🐼", "flag": "🇰🇷"}, {"id": 84, "name": "Robert Lewandowski", "country": "Poland", "role": "ST", "rating": 94, "attack": 98, "defense": 79, "skills": 89, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🇵🇱"}, {"id": 85, "name": "Alexis Sánchez", "country": "Chile", "role": "LW / ST", "rating": 89, "attack": 91, "defense": 78, "skills": 91, "best": "Attack / Skills", "accuracy": "Proxy estimate", "animal": "🐻", "flag": "🇨🇱"}, {"id": 86, "name": "Cindy Parlow Cone", "country": "United States", "role": "FW", "rating": 88, "attack": 91, "defense": 76, "skills": 86, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦦", "flag": "🇺🇸"}, {"id": 87, "name": "Kristine Lilly", "country": "United States", "role": "LW / MF", "rating": 91, "attack": 92, "defense": 82, "skills": 92, "best": "Attack / Skills", "accuracy": "Proxy estimate", "animal": "🐶", "flag": "🇺🇸"}, {"id": 88, "name": "Birgit Prinz", "country": "Germany", "role": "ST", "rating": 94, "attack": 97, "defense": 82, "skills": 91, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦌", "flag": "🇩🇪"}, {"id": 89, "name": "Brandi Chastain", "country": "United States", "role": "DF / MF", "rating": 90, "attack": 84, "defense": 94, "skills": 88, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐧", "flag": "🇺🇸"}, {"id": 90, "name": "Michelle Akers", "country": "United States", "role": "CM / FW", "rating": 94, "attack": 93, "defense": 94, "skills": 92, "best": "Defense", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇺🇸"}, {"id": 91, "name": "Mia Hamm", "country": "United States", "role": "FW / AM", "rating": 90, "attack": 92, "defense": 71, "skills": 89, "best": "Attack", "accuracy": "Verified", "animal": "🦊", "flag": "🇺🇸"}, {"id": 92, "name": "Abby Wambach", "country": "United States", "role": "ST", "rating": 92, "attack": 96, "defense": 82, "skills": 87, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐰", "flag": "🇺🇸"}, {"id": 93, "name": "Julie Foudy", "country": "United States", "role": "CM", "rating": 90, "attack": 86, "defense": 91, "skills": 92, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🐼", "flag": "🇺🇸"}, {"id": 94, "name": "Trinity Rodman", "country": "United States", "role": "RW / ST", "rating": 87, "attack": 89, "defense": 73, "skills": 87, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐱", "flag": "🇺🇸"}, {"id": 95, "name": "Sophia Wilson", "country": "United States", "role": "ST / LW", "rating": 88, "attack": 91, "defense": 74, "skills": 86, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐻", "flag": "🇺🇸"}, {"id": 96, "name": "Marta", "country": "Brazil", "role": "AM / FW", "rating": 95, "attack": 94, "defense": 76, "skills": 97, "best": "Skills", "accuracy": "Proxy estimate", "animal": "🦦", "flag": "🇧🇷"}, {"id": 97, "name": "Kelly Smith", "country": "England", "role": "ST / AM", "rating": 91, "attack": 93, "defense": 77, "skills": 92, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐶", "flag": "🏴"}, {"id": 98, "name": "Jennifer Hermoso", "country": "Spain", "role": "ST / AM", "rating": 90, "attack": 92, "defense": 78, "skills": 90, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🦌", "flag": "🇪🇸"}, {"id": 99, "name": "Aitana Bonmatí", "country": "Spain", "role": "CM / AM", "rating": 93, "attack": 89, "defense": 76, "skills": 93, "best": "Skills", "accuracy": "Verified", "animal": "🐧", "flag": "🇪🇸"}, {"id": 100, "name": "Christine Sinclair", "country": "Canada", "role": "ST / AM", "rating": 93, "attack": 96, "defense": 80, "skills": 91, "best": "Attack", "accuracy": "Proxy estimate", "animal": "🐹", "flag": "🇨🇦"}];
+const COLORS={brown:"#8b5a3c",lightblue:"#8fd1e8",pink:"#e96aa7",orange:"#ef8b43",red:"#df5454",yellow:"#e6c646",green:"#55a46d",blue:"#5282d0"};
+const COLOR_LABEL={brown:"Brown",lightblue:"Light Blue",pink:"Pink",orange:"Orange",red:"Red",yellow:"Yellow",green:"Green",blue:"Dark Blue"};
+const COLOR_ORDER=["brown","lightblue","pink","orange","red","yellow","green","blue"];
+const TOKEN_STYLES=[
+ {id:"silver",name:"สีเงิน",color:"#bfc6cd"},
+ {id:"gold",name:"สีทอง",color:"#d7ad45"},
+ {id:"red",name:"สีแดง",color:"#d94f55"},
+ {id:"blue",name:"สีน้ำเงิน",color:"#3f73c7"}
+];
+const AVATARS=["🦊","🐰","🐼","🐱","🐻","🦦","🐶","🐧","🦁","🐯","🐨","🦄"];
+
+const REAL_BOARD_ORDER=[
+ "GO",
+ "1990 Group Stage — Romania vs Argentina","Transfer","2002 Group Stage — France vs Senegal","Team Jet","1950 Group Stage — USA vs England","Game Changer","2014 Group Stage — Spain vs Netherlands",
+ "Just Visiting / On the Bench",
+ "2018 Round of 16 — Belgium vs Japan","Game Changer","1986 Round of 16 — Italy vs France","Team Jet","2006 Round of 16 — Argentina vs Mexico","Transfer","2002 Round of 16 — Korea Republic vs Italy",
+ "Free Parking",
+ "2010 Quarter-Final — Uruguay vs Ghana","Transfer","2022 Quarter-Final — Morocco vs Portugal","Team Jet","1954 Quarter-Final — Austria vs Switzerland","Game Changer","1994 Quarter-Final — Bulgaria vs Germany",
+ "Go to the Bench",
+ "1962 Semi-Final — Brazil vs Chile","Transfer","2006 Semi-Final — Germany vs Italy","Team Jet","1970 Final — Brazil vs Italy","Game Changer","2022 Final — Argentina vs France"
+];
+
+const KNOWN_GC=[
+ {id:"sombrero",name:"THE SOMBRERO FLICK",desc:"ทุกคนเลือก Active Player 1 คน เทียบ Player Rating; สูงสุดชนะ ถ้าเสมอทอย White Die; ผู้ชนะรับ 1 Point จากคู่แข่งทุกคน"},
+ {id:"zidane",name:"THE ZIDANE ROULETTE",desc:"เอา Historic Match จากคู่แข่ง 1 ใบที่ไม่อยู่ใน Complete Set; ถ้าไม่มี รับ 3 Points"},
+ {id:"bebeto",name:"CELEBRATE LIKE BEBETO!",desc:"แลก Historic Match ของคุณ 1 ใบกับคู่แข่ง 1 ใบ ห้ามใบใน Complete Set; ถ้าแลกไม่ได้ รับ 3 Points"},
+ {id:"fans",name:"THE FANS GO WILD!",desc:"เก็บไว้ หลังทอย Red Defense Die สามารถเปลี่ยนผลเป็น 🧤 ได้"},
+ {id:"sentoff",name:"SENT OFF!",desc:"เก็บไว้ ใช้ส่งคู่แข่งไป Bench ทันที; ไม่รับ GO ระหว่างทาง"},
+ {id:"bicycle",name:"BICYCLE KICK",desc:"เลือกคู่แข่ง ทั้งคู่เลือก Active Player; เทียบ Attack; ถ้าเสมอทอย White Die; ผู้ชนะรับ 2 Points"}
+];
+let setupN=2,state=null,actionLocked=false,setupProfiles=[],historyStack=[];
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const byId=id=>P.find(x=>x.id===id), rand=n=>Math.floor(Math.random()*n);
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=rand(i+1),t=a[i];a[i]=a[j];a[j]=t}return a}
+function save(){if(state)localStorage.setItem("wf100-companion",JSON.stringify(state))}
+function checkpoint(label="action"){
+ if(!state)return;
+ historyStack.push({label,state:JSON.stringify(state)});
+ if(historyStack.length>50)historyStack.shift();
+ updateUndo();
+}
+function updateUndo(){
+ let disabled=historyStack.length===0;
+ if($("#undoTop"))$("#undoTop").disabled=disabled;
+ if($("#globalUndo")){$("#globalUndo").disabled=disabled;$("#globalUndo").classList.toggle("hidden",!state)}
+}
+function undoLast(){
+ if(!historyStack.length)return;
+ let last=historyStack.pop();
+ state=JSON.parse(last.state);
+ actionLocked=false;
+ $("#overlay").innerHTML="";
+ if(state.phase==="draft"){show("draft");renderDraft()}else{show("game");renderGame()}
+ save();updateUndo();
+}
+function show(id){["setup","draft","game"].forEach(x=>$("#"+x).classList.toggle("hidden",x!==id))}
+function initFields(){
+ let defaults=["Jack","Film","Player 3","Player 4"];
+ setupProfiles=[...Array(setupN)].map((_,i)=>setupProfiles[i]||{name:defaults[i],avatar:AVATARS[i],token:TOKEN_STYLES[i].id});
+ renderProfileSetup();
+}
+function renderProfileSetup(){
+ let used=setupProfiles.map(x=>x.token);
+ $("#profileSetup").innerHTML=setupProfiles.map((sp,i)=>`
+  <div class="profileRow">
+   <div class="field"><label>ชื่อผู้เล่น ${i+1}</label><input class="setupName" data-i="${i}" value="${sp.name}"></div>
+   <div class="avatarPicker"><label>รูปโปรไฟล์</label><div class="avatarChoices">
+    ${AVATARS.map(a=>`<button class="avatarOpt ${sp.avatar===a?"on":""}" data-i="${i}" data-avatar="${a}">${a}</button>`).join("")}
+   </div></div>
+   <div class="tokenPicker"><label>สีหมากจริง</label><div class="tokenChoices">
+    ${TOKEN_STYLES.map(t=>`<button class="tokenOpt ${sp.token===t.id?"on":""} ${used.includes(t.id)&&sp.token!==t.id?"used":""}" data-i="${i}" data-token="${t.id}" title="${t.name}" style="background:${t.color}"></button>`).join("")}
+   </div><div class="tiny" style="margin-top:5px">${TOKEN_STYLES.find(t=>t.id===sp.token).name}</div></div>
+  </div>`).join("");
+ $$(".setupName").forEach(x=>x.oninput=()=>setupProfiles[+x.dataset.i].name=x.value);
+ $$(".avatarOpt").forEach(x=>x.onclick=()=>{setupProfiles[+x.dataset.i].avatar=x.dataset.avatar;renderProfileSetup()});
+ $$(".tokenOpt").forEach(x=>x.onclick=()=>{let i=+x.dataset.i,t=x.dataset.token;if(setupProfiles.some((p,j)=>j!==i&&p.token===t))return;setupProfiles[i].token=t;renderProfileSetup()});
+}
+initFields();
+$$(".seg button").forEach(b=>b.onclick=()=>{setupN=+b.dataset.n;$$(".seg button").forEach(x=>x.classList.toggle("on",x===b));initFields()});
+if(localStorage.getItem("wf100-companion"))$("#resumeBtn").classList.remove("hidden");
+$("#startBtn").onclick=startNew;
+$("#resumeBtn").onclick=()=>{state=JSON.parse(localStorage.getItem("wf100-companion"));actionLocked=false;historyStack=[];if(state.phase==="draft"){show("draft");renderDraft()}else{show("game");renderGame();passTo(state.current,true)}};
+$("#undoTop").onclick=undoLast;
+$("#globalUndo").onclick=undoLast;
+function resetAll(){localStorage.removeItem("wf100-companion");location.reload()}
+
+function newHistoricSlots(){
+ return [
+  {id:0,boardPos:1,color:"brown",slot:1,year:1990,stage:"GROUP STAGE",teams:"Romania vs Argentina",label:"1990 FIFA World Cup — Group Stage — Romania vs Argentina",cost:1,bonus:1,end:2,owner:null},
+  {id:1,boardPos:3,color:"brown",slot:2,year:2002,stage:"GROUP STAGE",teams:"France vs Senegal",label:"2002 FIFA World Cup — Group Stage — France vs Senegal",cost:1,bonus:1,end:2,owner:null},
+
+  {id:2,boardPos:5,color:"lightblue",slot:1,year:1950,stage:"GROUP STAGE",teams:"USA vs England",label:"1950 FIFA World Cup — Group Stage — USA vs England",cost:1,bonus:1,end:2,owner:null},
+  {id:3,boardPos:7,color:"lightblue",slot:2,year:2014,stage:"GROUP STAGE",teams:"Spain vs Netherlands",label:"2014 FIFA World Cup — Group Stage — Spain vs Netherlands",cost:1,bonus:1,end:2,owner:null},
+
+  {id:4,boardPos:9,color:"orange",slot:1,year:2018,stage:"ROUND OF 16",teams:"Belgium vs Japan",label:"2018 FIFA World Cup — Round of 16 — Belgium vs Japan",cost:2,bonus:2,end:3,owner:null},
+  {id:5,boardPos:11,color:"orange",slot:2,year:1986,stage:"ROUND OF 16",teams:"Italy vs France",label:"1986 FIFA World Cup — Round of 16 — Italy vs France",cost:2,bonus:2,end:3,owner:null},
+
+  {id:6,boardPos:13,color:"pink",slot:1,year:2006,stage:"ROUND OF 16",teams:"Argentina vs Mexico",label:"2006 FIFA World Cup — Round of 16 — Argentina vs Mexico",cost:2,bonus:2,end:3,owner:null},
+  {id:7,boardPos:15,color:"pink",slot:2,year:2002,stage:"ROUND OF 16",teams:"Korea Republic vs Italy",label:"2002 FIFA World Cup — Round of 16 — Korea Republic vs Italy",cost:2,bonus:2,end:3,owner:null},
+
+  {id:8,boardPos:17,color:"red",slot:1,year:2010,stage:"QUARTER-FINAL",teams:"Uruguay vs Ghana",label:"2010 FIFA World Cup — Quarter-Final — Uruguay vs Ghana",cost:3,bonus:3,end:4,owner:null},
+  {id:9,boardPos:19,color:"red",slot:2,year:2022,stage:"QUARTER-FINAL",teams:"Morocco vs Portugal",label:"2022 FIFA World Cup — Quarter-Final — Morocco vs Portugal",cost:3,bonus:3,end:4,owner:null},
+
+  {id:10,boardPos:21,color:"yellow",slot:1,year:1954,stage:"QUARTER-FINAL",teams:"Austria vs Switzerland",label:"1954 FIFA World Cup — Quarter-Final — Austria vs Switzerland",cost:3,bonus:3,end:4,owner:null},
+  {id:11,boardPos:23,color:"yellow",slot:2,year:1994,stage:"QUARTER-FINAL",teams:"Bulgaria vs Germany",label:"1994 FIFA World Cup — Quarter-Final — Bulgaria vs Germany",cost:3,bonus:3,end:4,owner:null},
+
+  {id:12,boardPos:25,color:"green",slot:1,year:1962,stage:"SEMI-FINAL",teams:"Brazil vs Chile",label:"1962 FIFA World Cup — Semi-Final — Brazil vs Chile",cost:4,bonus:4,end:5,owner:null},
+  {id:13,boardPos:27,color:"green",slot:2,year:2006,stage:"SEMI-FINAL",teams:"Germany vs Italy",label:"2006 FIFA World Cup — Semi-Final — Germany vs Italy",cost:4,bonus:4,end:5,owner:null},
+
+  {id:14,boardPos:29,color:"blue",slot:1,year:1970,stage:"FINAL",teams:"Brazil vs Italy",label:"1970 FIFA World Cup — Final — Brazil vs Italy",cost:5,bonus:5,end:6,owner:null},
+  {id:15,boardPos:31,color:"blue",slot:2,year:2022,stage:"FINAL",teams:"Argentina vs France",label:"2022 FIFA World Cup — Final — Argentina vs France",cost:5,bonus:5,end:6,owner:null}
+ ];
+}
+function startNew(){
+ let profiles=setupProfiles.map((sp,i)=>({...sp,name:(sp.name||`Player ${i+1}`).trim()})),points=Math.max(0,+$("#startPoints").value||20),mode=$("#poolMode").value;
+ let all=shuffle(P.map(x=>x.id)),pool=mode==="16"?all.slice(0,16):all;
+ state={phase:"draft",players:profiles.map(sp=>{let ts=TOKEN_STYLES.find(t=>t.id===sp.token);return{name:sp.name,points,posStatus:"board",benchAttempts:0,team:[],active:{},wc:[],kept:[],color:ts.color,token:sp.token,avatar:sp.avatar}}),
+ current:0,startPoints:points,draftPool:pool,draftIndex:0,reserve:[],reserveActive:{},historic:newHistoricSlots(),wcNumbers:setupN<=3?[1,3,4,5,7]:[1,2,3,4,5,6,7],wcPlayed:[],log:["สร้างเกมใหม่ — ใช้กระดานและการ์ดจริงบนโต๊ะ"],lastDraftPicker:null};
+ historyStack=[];show("draft");renderDraft();save();updateUndo()
+}
+function draftPi(){let N=state.players.length,round=Math.floor(state.draftIndex/N),inside=state.draftIndex%N;return round%2===0?inside:(N-1-inside)}
+function cardHTML(q,pick=false,hideStats=false){
+ return `<div class="playerCard ${pick?"pick":""}" data-id="${q.id}"><div class="pcAnimal">${q.animal}</div><div class="pcName">${q.name}</div><div class="pcMeta">${q.flag} ${q.country} • ${q.role}</div>${hideStats?`<div class="tiny">Stats hidden</div>`:`<div class="statrow"><div class="stat">R<b>${q.rating}</b></div><div class="stat">A<b>${q.attack}</b></div><div class="stat">D<b>${q.defense}</b></div><div class="stat">S<b>${q.skills}</b></div></div>`}</div>`
+}
+function renderDraft(){
+ let pi=draftPi(),pl=state.players[pi];$("#draftWho").textContent=pl.name;$("#draftWho").style.color=pl.color;
+ $("#draftProgress").textContent=`${state.draftIndex+1}/${state.players.length*4} • Snake Draft`;
+ $("#draftTeams").innerHTML=state.players.map(x=>`<div style="margin:7px 0;color:${x.color};display:flex;align-items:center;gap:6px"><span class="profileAvatar" style="background:${x.color};width:32px;height:32px;font-size:19px">${x.avatar}</span><b>${x.name}</b> — ${x.team.length}/4 ${x.team.map(id=>byId(id).animal).join("")}</div>`).join("");
+ $("#draftCards").innerHTML=state.draftPool.map(id=>cardHTML(byId(id),true,true)).join("");
+ $$("#draftCards .pick").forEach(el=>el.onclick=()=>draftPick(+el.dataset.id))
+}
+function draftPick(id){
+ checkpoint("Draft นักเตะ");
+ let pi=draftPi(),pl=state.players[pi];pl.team.push(id);pl.active[id]=true;state.lastDraftPicker=pi;state.draftPool=state.draftPool.filter(x=>x!==id);state.draftIndex++;
+ if(state.draftIndex>=state.players.length*4){
+   state.reserve=[...state.draftPool];state.reserve.forEach(id=>state.reserveActive[id]=true);state.phase="play";state.current=state.lastDraftPicker;state.log.unshift(`${pl.name} เลือกนักเตะใบที่ 4 เป็นคนสุดท้าย จึงเริ่มเกม`);
+   show("game");renderGame();save();passTo(state.current,true)
+ }else{renderDraft();save()}
+}
+
+function renderGame(){
+ renderScores();renderTeam();renderLog();
+ let pl=state.players[state.current];
+ $("#turnName").innerHTML=`<span class="profileAvatar" style="display:inline-grid;vertical-align:middle;background:${pl.color};margin-right:8px">${pl.avatar}</span>${pl.name}`;
+ $("#turnName").style.color=pl.color;
+ $("#wcBadge").textContent=`World Cup 26 เหลือ: ${state.wcNumbers.length-state.wcPlayed.length}`;
+ updateUndo();save()
+}
+function renderScores(){
+ $("#scores").innerHTML=state.players.map((pl,i)=>`<div class="score ${i===state.current?"current":""}"><div class="profileAvatar" style="background:${pl.color}">${pl.avatar}</div><div><b>${pl.name}</b><div class="tiny">${pl.posStatus==="bench"?"🪑 BENCH • ":""}Historic ${state.historic.filter(h=>h.owner===i).length} • WC26 ${pl.wc.length}</div></div><div class="pts">${pl.points}</div></div>`).join("")
+}
+function renderTeam(){
+ let pl=state.players[state.current];$("#teamTitle").textContent=`ทีม ${pl.name}`;
+ $("#teamGrid").innerHTML=pl.team.map(id=>{let q=byId(id);return `<div class="mini ${pl.active[id]?"":"off"}">${q.animal}<b>${q.name}</b><div>R${q.rating} A${q.attack} D${q.defense} S${q.skills}</div><div>${pl.active[id]?"🟢 ACTIVE":"⚪ INACTIVE"}</div></div>`}).join("");
+ $("#powers").innerHTML=pl.kept.length?pl.kept.map((id,k)=>`<button class="power" data-power="${k}">${KNOWN_GC.find(g=>g.id===id)?.name||id}</button>`).join(""):"<span class='tiny'>ไม่มีการ์ด Game Changer ที่เก็บไว้</span>";
+ $$("#powers [data-power]").forEach(b=>b.onclick=()=>useKept(+b.dataset.power))
+}
+function renderLog(){$("#log").innerHTML=state.log.map(x=>`<div>${x}</div>`).join("")}
+function log(msg){state.log.unshift(msg);state.log=state.log.slice(0,100);renderGame()}
+function passTo(pi,initial=false){
+ let pl=state.players[pi];
+ $("#overlay").innerHTML=`<div class="pass"><div class="passBox"><div class="profileAvatar" style="background:${pl.color};width:88px;height:88px;border-radius:26px;font-size:53px;margin:0 auto 12px">${pl.avatar}</div><div class="muted">${initial?"เริ่มเกม":"ส่งโทรศัพท์ให้"}</div><div class="passName" style="color:${pl.color}">${pl.name}</div><p class="muted">${pl.posStatus==="bench"?"คุณอยู่บน Bench — เว็บจะช่วยจัดการการออกจาก Bench ก่อน":"ทอยลูกเต๋าสีขาว เดินหมาก แล้วเลือกช่องที่ตก"}</p><button id="readyBtn" class="btn">พร้อมแล้ว</button></div></div>`;
+ $("#readyBtn").onclick=async()=>{
+  $("#overlay").innerHTML="";
+  actionLocked=false;
+  renderGame();
+  if(pl.posStatus==="bench") await benchStart();
+ }
+}
+async function endTurn(){
+ actionLocked=true;
+ state.current=(state.current+1)%state.players.length;
+ renderGame();
+ save();
+ setTimeout(()=>passTo(state.current,false),120)
+}
+$$("[data-act]").forEach(b=>b.onclick=async()=>{if(actionLocked)return;checkpoint(`Action: ${b.dataset.act}`);actionLocked=true;let a=b.dataset.act;try{
+ if(a==="go")await doGO();
+ else if(a==="historic")await doHistoric();
+ else if(a==="transfer")await doTransfer();
+ else if(a==="gamechanger")await doGameChanger();
+ else if(a==="jet")await info("TEAM JET ✈️","ย้ายหมากจริงไปช่องใดก็ได้ที่อยู่ระหว่าง Team Jet ช่องนี้กับ Team Jet ถัดไป แล้วแตะ Action ของช่องปลายทางใน Companion นี้ ถ้าเลือก GO ให้หยุดที่ GO และทำ GO / World Cup 26; ถ้าไม่ย้าย ให้กด “จบตา / ช่องอื่น”");
+ else if(a==="bench")await sendToBench(state.current);
+ else if(a==="transit")await info("Transit / Just Visiting","ไม่มีอะไรเกิดขึ้น");
+ else if(a==="parking")await info("Free Parking 🅿️","ไม่มีอะไรเกิดขึ้น");
+ }finally{actionLocked=false}
+ if(a!=="go"&&a!=="historic"&&a!=="transfer"&&a!=="gamechanger"&&a!=="bench"&&a!=="jet")await endTurn();
+});
+async function info(t,b){return modal(t,b,[["ok","ตกลง"]])}
+function modal(title,body,buttons=[["ok","ตกลง"]]){
+ return new Promise(res=>{$("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>${title}</h2>${body}<div class="actions">${buttons.map((b,i)=>`<button class="${i===0?"primary":""}" data-v="${b[0]}">${b[1]}</button>`).join("")}</div></div></div>`;$$("[data-v]").forEach(x=>x.onclick=()=>{let v=x.dataset.v;$("#overlay").innerHTML="";res(v)})})
+}
+function choose(title,items,extra=""){
+ return new Promise(res=>{$("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>${title}</h2>${extra}<div class="choices">${items.map((it,k)=>`<button class="choice ch" data-k="${k}">${it.html}</button>`).join("")}</div></div></div>`;$$(".ch").forEach(x=>x.onclick=()=>{let k=+x.dataset.k;$("#overlay").innerHTML="";res(items[k].value)})})
+}
+function ensureActive(pi){let pl=state.players[pi],a=pl.team.filter(id=>pl.active[id]);if(!a.length){pl.team.forEach(id=>pl.active[id]=true);a=[...pl.team];log(`<strong>${pl.name}</strong> ใช้นักเตะครบทีม → Reactivate ทั้งทีม`)}return a}
+async function choosePlayer(pi,title,exclude=[]){
+ let ids=ensureActive(pi).filter(id=>!exclude.includes(id));await privatePass(pi,title);
+ return choose(title,ids.map(id=>{let q=byId(id);return{value:id,html:`<div class="big">${q.animal}</div><b>${q.name}</b><small>R ${q.rating} • A ${q.attack} • D ${q.defense} • S ${q.skills}</small>`}}))
+}
+function privatePass(pi,title){return new Promise(res=>{let pl=state.players[pi];$("#overlay").innerHTML=`<div class="pass"><div class="passBox"><div class="profileAvatar" style="background:${pl.color};width:84px;height:84px;border-radius:25px;font-size:50px;margin:0 auto 12px">${pl.avatar}</div><div class="passName" style="color:${pl.color}">${pl.name}</div><p class="muted">${title}<br>ให้ผู้เล่นคนอื่นหลบสายตาก่อนดู Stats</p><button id="privateReady" class="btn">ดูการ์ดของฉัน</button></div></div>`;$("#privateReady").onclick=()=>{$("#overlay").innerHTML="";res()}})}
+function usePlayer(pi,id){state.players[pi].active[id]=false;if(state.players[pi].team.every(x=>!state.players[pi].active[x])){state.players[pi].team.forEach(x=>state.players[pi].active[x]=true);log(`<strong>${state.players[pi].name}</strong> นักเตะ Inactive ครบทีม → Reactivate ทั้งทีม`)}}
+async function chooseOpponent(cur,title="เลือกคู่แข่งตามการ์ดจริง"){return choose(title,state.players.map((x,i)=>({x,i})).filter(o=>o.i!==cur).map(o=>({value:o.i,html:`<b style="color:${o.x.color}">${o.x.name}</b><small>${o.x.points} Points • ${o.x.team.map(id=>byId(id).animal).join("")}</small>`})))}
+
+async function doGO(){
+ let cur=state.current,pl=state.players[cur];
+ pl.points+=4;pl.team.forEach(id=>pl.active[id]=true);log(`<strong>${pl.name}</strong> ถึง GO → +4 Points และ Reactivate ทีม`);
+ if(state.wcPlayed.length>=state.wcNumbers.length){await finishGame();return}
+ let expected=state.wcNumbers[state.wcPlayed.length];
+ await info("🏁 GO / FIFA World Cup 26",`<div class="info">รับ <b>4 Points</b> แล้ว Reactivate นักเตะ Inactive ของคุณ</div><p>เปิดการ์ด FIFA World Cup 26 ใบบนสุดจากกองจริง ตอนนี้ควรเป็นหมายเลข <b>${expected}</b></p>`);
+ await doWorldCup(expected);
+ if(state.phase!=="ended")await endTurn()
+}
+async function doWorldCup(num){
+ let cur=state.current,pl=state.players[cur],op=await chooseOpponent(cur,"เลือกคู่แข่งที่การ์ด FIFA World Cup 26 ระบุ");
+ state.players[cur].team.forEach(id=>state.players[cur].active[id]=true);state.players[op].team.forEach(id=>state.players[op].active[id]=true);
+ let cfg=await worldCupConfig(num),mine=[],theirs=[];
+ for(let k=0;k<3;k++){mine.push(await choosePlayer(cur,`World Cup 26 — Round ${k+1}`,mine));theirs.push(await choosePlayer(op,`World Cup 26 — Round ${k+1}`,theirs))}
+ let aWins=0,bWins=0,ties=0,rows=[];
+ for(let k=0;k<3;k++){
+  let A=byId(mine[k]),B=byId(theirs[k]),as=cfg.rounds[k][0],bs=cfg.rounds[k][1],av=A[as],bv=B[bs];
+  if(av>bv)aWins++;else if(bv>av)bWins++;else ties++;
+  rows.push(`R${k+1}: ${A.name} ${as.toUpperCase()} ${av} vs ${B.name} ${bs.toUpperCase()} ${bv}${av===bv?" — Tie":""}`);
+ }
+ let winner=null;
+ if(aWins>=2)winner=cur;else if(bWins>=2)winner=op;
+ else{
+  let d=await whiteDiceTie(cur,op);winner=d.winner;rows.push(`Tiebreak White Die: ${d.a}-${d.b}`);
+ }
+ state.players[cur].team.forEach(id=>state.players[cur].active[id]=true);state.players[op].team.forEach(id=>state.players[op].active[id]=true);
+ state.players[winner].wc.push({number:num,value:cfg.value});state.wcPlayed.push(num);
+ await info(`🏆 FIFA World Cup 26 #${num}`,rows.join("<br>")+`<div class="notice"><b>${state.players[winner].name}</b> ชนะและเก็บการ์ดจริงไว้ • Game End Value ${cfg.value}</div>`);
+ log(`<strong>${state.players[winner].name}</strong> ชนะ FIFA World Cup 26 #${num}`);
+ if(state.wcPlayed.length>=state.wcNumbers.length)await finishGame()
+}
+function worldCupConfig(num){
+ return new Promise(res=>{$("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>อ่าน FIFA World Cup 26 #${num} จากการ์ดจริง</h2><p class="hint">เลือก Stat ของทั้งสองฝ่ายตามที่การ์ดพิมพ์ไว้ในแต่ละ Round</p>${[1,2,3].map(i=>`<div class="formgrid"><div><label>Round ${i} — ผู้เล่นปัจจุบัน</label><select id="wa${i}">${statOptions()}</select></div><div><label>Round ${i} — คู่แข่ง</label><select id="wb${i}">${statOptions()}</select></div></div>`).join("")}<label>Game End Value ที่มุมการ์ด</label><input id="wcVal" type="number" min="0" value="0"><div class="actions"><button class="primary" id="wcCfgOk">ถัดไป</button></div></div></div>`;
+ $("#wcCfgOk").onclick=()=>{let rounds=[1,2,3].map(i=>[$("#wa"+i).value,$("#wb"+i).value]),value=Math.max(0,+$("#wcVal").value||0);$("#overlay").innerHTML="";res({rounds,value})}})
+}
+function statOptions(){return `<option value="rating">Player Rating</option><option value="attack">Attack</option><option value="defense">Defense</option><option value="skills">Skills</option>`}
+async function whiteDiceTie(a,b){
+ let x=await askWhiteDie("ลูกเต๋าสีขาว — Tiebreak",state.players[a].name);
+ let y=await askWhiteDie("ลูกเต๋าสีขาว — Tiebreak",state.players[b].name);
+ if(x===y){await info("เสมออีกครั้ง",`${state.players[a].name} และ ${state.players[b].name} ทอยได้ ${x} เท่ากัน — ทอยใหม่`);return whiteDiceTie(a,b)}
+ return {winner:x>y?a:b,a:x,b:y}
+}
+async function doHistoric(){
+ let h=await chooseHistoric();
+ let cur=state.current;
+ if(h.owner===null){
+  let ok=await ensureFunds(cur,h.cost);
+  if(ok){
+    state.players[cur].points-=h.cost;
+  }else{
+    let paid=state.players[cur].points;
+    state.players[cur].points=0;
+    log(`${state.players[cur].name} จ่ายค่าควบคุมได้ ${paid}/${h.cost}; ส่วนที่เหลือของหนี้สิ้นสุด`);
+  }
+  h.owner=cur;log(`<strong>${state.players[cur].name}</strong> ซื้อ ${h.label} ราคา ${h.cost}`);await info("ควบคุม Historic Match แล้ว",`${h.label}<br>Cost ${h.cost} • Bonus ${h.bonus} • Game End ${h.end}`);await endTurn();return
+ }
+ if(h.owner===cur){await info("Historic Match ของคุณเอง",h.label);await endTurn();return}
+ await historicChallenge(h);await endTurn()
+}
+function chooseHistoric(){
+ return choose(
+  "เลือก Historic Match ที่หมากตก",
+  state.historic
+   .slice()
+   .sort((a,b)=>a.boardPos-b.boardPos)
+   .map(h=>({
+    value:h,
+    html:`<div style="border-left:8px solid ${COLORS[h.color]};padding-left:8px">
+      <b>${h.year} FIFA World Cup — ${h.stage}</b>
+      <small>${h.teams}<br>ราคา ${h.cost} Point • ${h.owner===null?"ยังไม่มีเจ้าของ":"เจ้าของ: "+state.players[h.owner].name}</small>
+    </div>`
+   }))
+ )
+}
+function configureHistoric(h){
+ if(h.cost!==null&&h.bonus!==null&&h.end!==null)return Promise.resolve();
+ return new Promise(res=>{$("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>ตั้งค่า ${COLOR_LABEL[h.color]} ${h.slot}</h2><p class="hint">อ่านค่าจากช่องบนกระดานจริงและด้านหลัง Historic Match card ครั้งแรกเท่านั้น เว็บจะจำให้เกมนี้</p><label>ชื่อบนกระดาน / คู่แข่งขัน</label><input id="hmLabel" value="${h.label}"><div class="formgrid"><div><label>Cost บนช่อง</label><input id="hmCost" type="number" min="0" value="${h.cost??""}"></div><div><label>Bonus Points ด้านหลังการ์ด</label><input id="hmBonus" type="number" min="0" value="${h.bonus??""}"></div></div><label>Game End Value ด้านหลังการ์ด</label><input id="hmEnd" type="number" min="0" value="${h.end??""}"><div class="actions"><button class="primary" id="hmOk">บันทึก</button></div></div></div>`;
+ $("#hmOk").onclick=()=>{h.label=$("#hmLabel").value.trim()||h.label;h.cost=Math.max(0,+$("#hmCost").value||0);h.bonus=Math.max(0,+$("#hmBonus").value||0);h.end=Math.max(0,+$("#hmEnd").value||0);$("#overlay").innerHTML="";save();res()}})
+}
+function configureHistoricEdit(h){
+ return new Promise(res=>{$("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>แก้ไข ${COLOR_LABEL[h.color]} ${h.slot}</h2><label>ชื่อบนกระดาน / คู่แข่งขัน</label><input id="hmLabelE" value="${h.label}"><div class="formgrid"><div><label>Cost บนช่อง</label><input id="hmCostE" type="number" min="0" value="${h.cost??""}"></div><div><label>Bonus Points ด้านหลังการ์ด</label><input id="hmBonusE" type="number" min="0" value="${h.bonus??""}"></div></div><label>Game End Value ด้านหลังการ์ด</label><input id="hmEndE" type="number" min="0" value="${h.end??""}"><div class="actions"><button class="primary" id="hmOkE">บันทึก</button></div></div></div>`;
+ $("#hmOkE").onclick=()=>{h.label=$("#hmLabelE").value.trim()||h.label;h.cost=Math.max(0,+$("#hmCostE").value||0);h.bonus=Math.max(0,+$("#hmBonusE").value||0);h.end=Math.max(0,+$("#hmEndE").value||0);$("#overlay").innerHTML="";save();res()}})
+}
+async function historicChallenge(h){
+ let owner=h.owner,vis=state.current,aid=await choosePlayer(owner,"Historic Match — เจ้าของเลือก Attack"),did=await choosePlayer(vis,"Historic Match — ผู้มาเยือนเลือก Defense"),A=byId(aid),D=byId(did);
+ let dice=await physicalSpecialDice(state.players[owner].name,state.players[vis].name),ownerWins=false,explain="";
+ if(dice.g==="ball"&&dice.r!=="glove"){ownerWins=true;explain="Green Die = ⚽ → เจ้าของชนะทันที"}
+ else if(dice.r==="glove"){ownerWins=false;explain=dice.g==="ball"?"⚽ + 🧤 พร้อมกัน → ผู้มาเยือนชนะ":"Red Die = 🧤 → ผู้มาเยือนชนะทันที"}
+ else{let at=A.attack+dice.g,de=D.defense+dice.r;ownerWins=at>de;explain=`${A.name}: ${A.attack}+${dice.g}=${at} vs ${D.name}: ${D.defense}+${dice.r}=${de}`}
+ usePlayer(owner,aid);usePlayer(vis,did);
+ if(ownerWins){let b=h.bonus*(completeSet(owner,h.color)?2:1);await transferPoints(vis,owner,b);await info("เจ้าของ Historic Match ชนะ",`${explain}<div class="notice">${state.players[vis].name} จ่าย ${b} Point${completeSet(owner,h.color)?" (Complete Set ×2)":""}</div>`);log(`<strong>${state.players[owner].name}</strong> ป้องกัน ${h.label} สำเร็จ`)}
+ else{if(!completeSet(owner,h.color)){h.owner=vis;await info("ผู้มาเยือนชนะ",`${explain}<div class="notice">ไม่ต้องจ่าย และยึด Historic Match จากเจ้าของ</div>`);log(`<strong>${state.players[vis].name}</strong> ยึด ${h.label}`)}else{await info("ผู้มาเยือนชนะ",`${explain}<div class="notice">ไม่ต้องจ่าย แต่ยึดไม่ได้ เพราะเจ้าของมี Complete Color Set</div>`)}}
+}
+function completeSet(owner,color){return state.historic.filter(h=>h.color===color).every(h=>h.owner===owner)}
+function physicalSpecialDice(ownerName,visitorName){
+ return new Promise(res=>{
+  let g=null,r=null;
+  $("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>Historic Match Challenge</h2>
+   <div class="dicePanel green"><div class="diceTitle">🟢 ${ownerName} — ทอยลูกเต๋าสีเขียว (Attack)</div><div class="hint">เลือกผลตามหน้าลูกเต๋าที่ออกจริง</div><div class="diceChoices">${[2,3,4,5,6,"⚽"].map(v=>`<button class="diceChoice gd" data-v="${v}">${v}</button>`).join("")}</div></div>
+   <div class="dicePanel red"><div class="diceTitle">🔴 ${visitorName} — ทอยลูกเต๋าสีแดง (Defense)</div><div class="hint">เลือกผลตามหน้าลูกเต๋าที่ออกจริง</div><div class="diceChoices">${[1,2,3,4,5,"🧤"].map(v=>`<button class="diceChoice rd" data-v="${v}">${v}</button>`).join("")}</div></div>
+   <div class="actions"><button class="primary" id="diceOk" disabled>คำนวณ</button></div></div></div>`;
+  $$(".gd").forEach(b=>b.onclick=()=>{g=b.dataset.v==="⚽"?"ball":+b.dataset.v;$$(".gd").forEach(x=>x.style.outline="");b.style.outline="3px solid #2f7f48";$("#diceOk").disabled=(g===null||r===null)});
+  $$(".rd").forEach(b=>b.onclick=()=>{r=b.dataset.v==="🧤"?"glove":+b.dataset.v;$$(".rd").forEach(x=>x.style.outline="");b.style.outline="3px solid #b64e4e";$("#diceOk").disabled=(g===null||r===null)});
+  $("#diceOk").onclick=()=>{$("#overlay").innerHTML="";res({g,r})}
+ })
+}
+async function ensureFunds(pi,amount){
+ while(state.players[pi].points<amount){
+  let owned=state.historic.filter(h=>h.owner===pi);if(!owned.length)break;
+  let h=await choose("Points ไม่พอ — ขาย Historic Match คืน Bank",owned.map(h=>({value:h,html:`<b>${h.label}</b><small>ราคาแนะนำ: ใช้ราคา Cost บนกระดานจริง = ${h.cost??"?"}</small>`})));
+  let sale=h.cost??0;h.owner=null;state.players[pi].points+=sale;log(`${state.players[pi].name} ขาย ${h.label} คืน Bank +${sale}`)
+ }
+ return state.players[pi].points>=amount
+}
+async function transferPoints(from,to,amount){
+ let enough=await ensureFunds(from,amount),paid=Math.min(amount,state.players[from].points);state.players[from].points-=paid;state.players[to].points+=paid;if(!enough&&paid<amount)log(`${state.players[from].name} จ่ายได้ ${paid}/${amount}; หนี้ส่วนที่เหลือสิ้นสุด`);renderGame()
+}
+
+async function doTransfer(){
+ let cur=state.current,me=state.players[cur],my=await choosePlayerAny(cur,"เลือกนักเตะของคุณที่จะแลก");
+ let opts=[];state.players.forEach((pl,i)=>{if(i!==cur)pl.team.forEach(id=>opts.push({kind:"player",owner:i,id}))});state.reserve.forEach(id=>opts.push({kind:"reserve",owner:null,id}));
+ if(!opts.length){await info("Transfer","ไม่มีนักเตะคู่แข่งหรือกองสำรองให้แลก");await endTurn();return}
+ let k=await choose("เลือกนักเตะที่คุณต้องการ",opts.map((o,i)=>{let q=byId(o.id);return{value:i,html:`<div class="big">${q.animal}</div><b>${q.name}</b><small>${o.kind==="reserve"?"Reserve":state.players[o.owner].name} • R${q.rating} A${q.attack} D${q.defense} S${q.skills}</small>`}})),o=opts[k],myStatus=me.active[my];
+ if(o.kind==="player"){let other=state.players[o.owner],targetStatus=other.active[o.id];me.team=me.team.map(x=>x===my?o.id:x);other.team=other.team.map(x=>x===o.id?my:x);delete me.active[my];delete other.active[o.id];me.active[o.id]=targetStatus;other.active[my]=myStatus;log(`<strong>${me.name}</strong> Transfer ${byId(my).name} ↔ ${byId(o.id).name} (${other.name})`)}
+ else{
+  let targetStatus=state.reserveActive[o.id]!==undefined?state.reserveActive[o.id]:true;
+  me.team=me.team.map(x=>x===my?o.id:x);
+  delete me.active[my];
+  me.active[o.id]=targetStatus;
+  state.reserve=state.reserve.filter(x=>x!==o.id);
+  delete state.reserveActive[o.id];
+  state.reserve.push(my);
+  state.reserveActive[my]=myStatus;
+  log(`<strong>${me.name}</strong> Transfer ${byId(my).name} ↔ ${byId(o.id).name} (Reserve)`)
+ }
+ await info("Transfer สำเร็จ","สถานะ Active / Inactive ของนักเตะที่แลกกับคู่แข่งถูกย้ายติดไปกับนักเตะตามกติกา");await endTurn()
+}
+function choosePlayerAny(pi,title){return privatePass(pi,title).then(()=>choose(title,state.players[pi].team.map(id=>{let q=byId(id);return{value:id,html:`<div class="big">${q.animal}</div><b>${q.name}</b><small>${state.players[pi].active[id]?"ACTIVE":"INACTIVE"} • R${q.rating} A${q.attack} D${q.defense} S${q.skills}</small>`}})))}
+
+async function doGameChanger(){
+ await info("🎴 Game Changer","จั่วการ์ด Game Changer ใบบนสุดจากกองจริง แล้วเลือกชื่อที่ตรงกับการ์ดที่คุณถือ");
+ let choices=KNOWN_GC.map(g=>({value:g.id,html:`<b>${g.name}</b><small>${g.desc}</small>`}));choices.push({value:"custom",html:"<b>OTHER / CUSTOM CARD</b><small>สำหรับ Game Changer ใบอื่นที่ยังไม่ได้ใส่ preset</small>"});
+ let id=await choose("คุณจั่วการ์ดใบไหน?",choices),cur=state.current;
+ if(id==="sombrero")await gcSombrero();
+ else if(id==="bicycle")await gcBicycle();
+ else if(id==="zidane")await gcZidane();
+ else if(id==="bebeto")await gcBebeto();
+ else if(id==="fans"||id==="sentoff"){state.players[cur].kept.push(id);log(`<strong>${state.players[cur].name}</strong> เก็บ ${KNOWN_GC.find(g=>g.id===id).name} ไว้ใช้ภายหลัง`);await info("เก็บการ์ดไว้",KNOWN_GC.find(g=>g.id===id).desc)}
+ else await customGC();
+ await endTurn()
+}
+async function gcSombrero(){
+ let vals=[];for(let i=0;i<state.players.length;i++){let id=await choosePlayer(i,"The Sombrero Flick — Player Rating");vals.push({i,id,v:byId(id).rating});usePlayer(i,id)}
+ let max=Math.max(...vals.map(x=>x.v)),ties=vals.filter(x=>x.v===max),winner;
+ if(ties.length===1)winner=ties[0].i;else winner=(await multiWhiteTie(ties.map(x=>x.i))).winner;
+ for(let i=0;i<state.players.length;i++)if(i!==winner)await transferPoints(i,winner,1);
+ await info("THE SOMBRERO FLICK",`<div class="notice"><b>${state.players[winner].name}</b> ชนะ Player Rating และรับ 1 Point จากทุกคน</div>`)
+}
+async function multiWhiteTie(indices){
+ let results=[];
+ for(let i of indices){
+  let r=await askWhiteDie("ลูกเต๋าสีขาว — Tiebreak",state.players[i].name);
+  results.push({i,r});
+ }
+ let max=Math.max(...results.map(x=>x.r)),top=results.filter(x=>x.r===max);
+ if(top.length>1){await info("ยังเสมอ",`ผู้ที่ได้ ${max} เท่ากันต้องทอยใหม่`);return multiWhiteTie(top.map(x=>x.i))}
+ return {winner:top[0].i}
+}
+async function gcBicycle(){let cur=state.current,op=await chooseOpponent(cur),a=await choosePlayer(cur,"Bicycle Kick — Attack"),b=await choosePlayer(op,"Bicycle Kick — Attack"),A=byId(a),B=byId(b),winner;if(A.attack===B.attack)winner=(await whiteDiceTie(cur,op)).winner;else winner=A.attack>B.attack?cur:op;usePlayer(cur,a);usePlayer(op,b);await transferPoints(winner===cur?op:cur,winner,2);await info("BICYCLE KICK",`${A.name} Attack ${A.attack} vs ${B.name} Attack ${B.attack}<div class="notice">${state.players[winner].name} ชนะ +2 Points</div>`)}
+async function gcZidane(){let arr=[];state.players.forEach((pl,i)=>{if(i!==state.current)state.historic.filter(h=>h.owner===i&&!completeSet(i,h.color)).forEach(h=>arr.push(h))});if(!arr.length){state.players[state.current].points+=3;return info("THE ZIDANE ROULETTE","ไม่มี Historic Match ที่เอาได้ → รับ 3 Points จาก Bank")}let h=await choose("เลือก Historic Match ที่จะเอา",arr.map(h=>({value:h,html:`<b>${h.label}</b><small>${COLOR_LABEL[h.color]} • Owner ${state.players[h.owner].name}</small>`})));h.owner=state.current;log(`${state.players[state.current].name} ใช้ Zidane Roulette เอา ${h.label}`)}
+async function gcBebeto(){let mine=state.historic.filter(h=>h.owner===state.current&&!completeSet(state.current,h.color)),other=[];state.players.forEach((pl,i)=>{if(i!==state.current)state.historic.filter(h=>h.owner===i&&!completeSet(i,h.color)).forEach(h=>other.push(h))});if(!mine.length||!other.length){state.players[state.current].points+=3;return info("CELEBRATE LIKE BEBETO!","ไม่มี Historic Match ที่แลกได้ → รับ 3 Points จาก Bank")}let a=await choose("เลือก Historic Match ของคุณ",mine.map(h=>({value:h,html:`<b>${h.label}</b>`}))),b=await choose("เลือก Historic Match ของคู่แข่ง",other.map(h=>({value:h,html:`<b>${h.label}</b><small>Owner ${state.players[h.owner].name}</small>`}))),o=b.owner;a.owner=o;b.owner=state.current;log(`${state.players[state.current].name} ใช้ Bebeto แลก Historic Match`)}
+function customGC(){
+ return new Promise(res=>{$("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>Custom Game Changer</h2><p class="hint">อ่านการ์ดจริงแล้วใช้เครื่องมือนี้บันทึกผลโดยไม่ให้เว็บเดาเนื้อหาการ์ด</p><label>คำอธิบายสั้น ๆ</label><input id="cgText" placeholder="เช่น ผู้ชนะรับ 3 Points"><label>Point change ของผู้เล่นปัจจุบัน (+/-)</label><input id="cgPts" type="number" value="0"><label><input id="cgReact" type="checkbox" style="width:auto"> Reactivate ทีมผู้เล่นปัจจุบัน</label><div class="actions"><button class="primary" id="cgOk">บันทึกผล</button></div></div></div>`;
+ $("#cgOk").onclick=()=>{let pl=state.players[state.current],pts=+$("#cgPts").value||0;pl.points=Math.max(0,pl.points+pts);if($("#cgReact").checked)pl.team.forEach(id=>pl.active[id]=true);log(`Custom Game Changer: ${$("#cgText").value||"manual effect"} (${pts>=0?"+":""}${pts} Point)`);$("#overlay").innerHTML="";res()}})
+}
+async function useKept(index){
+ checkpoint("ใช้ Game Changer ที่เก็บไว้");
+ let pl=state.players[state.current],id=pl.kept[index];
+ if(id==="sentoff"){let op=await chooseOpponent(state.current,"SENT OFF! — เลือกคู่แข่ง");await sendToBench(op);pl.kept.splice(index,1);log(`${pl.name} ใช้ SENT OFF! กับ ${state.players[op].name}`);renderGame()}
+ else if(id==="fans"){let use=await modal("THE FANS GO WILD!","หลังจากคุณทอย Red Defense Die จริง คุณสามารถเปลี่ยนผลเป็น 🧤 ได้ ใช้การ์ดตอนนี้หรือไม่?",[["yes","ใช้การ์ดแล้ว"],["no","ยังไม่ใช้"]]);if(use==="yes"){pl.kept.splice(index,1);log(`${pl.name} ใช้ THE FANS GO WILD! → Red Die = 🧤`);renderGame()}}
+}
+
+async function sendToBench(pi){let pl=state.players[pi];pl.posStatus="bench";pl.benchAttempts=0;log(`<strong>${pl.name}</strong> ถูกส่งไป Bench โดยไม่รับ GO ระหว่างทาง`);await info("On the Bench 🪑",`${pl.name} ย้ายหมากจริงไปช่อง Bench / Transit โดยไม่หยุดที่ GO และไม่รับผล GO`);if(pi===state.current)await endTurn()}
+async function benchStart(){
+ let pi=state.current,pl=state.players[pi],choice=await modal("คุณอยู่บน Bench 🪑",`Attempts ที่ลองทอยออกแล้ว: ${pl.benchAttempts}/3<br><br>เลือกวิธีออกตามกติกา`,[["pay","จ่าย 1 Point แล้วออก"],["roll","ลองทอย White Die"]]);
+ if(choice==="pay"){await ensureFunds(pi,1);if(pl.points>0)pl.points-=1;pl.posStatus="board";pl.benchAttempts=0;await info("ออกจาก Bench แล้ว","ทอย White Die จริง เดินตามผล แล้วทำ Action ของช่องที่ตก จากนั้นเลือกช่องในหน้า Companion");renderGame();return}
+ let d=await askWhiteDie("ผลลูกเต๋าสีขาว",pl.name);
+ if(d===6){pl.posStatus="board";pl.benchAttempts=0;await info("ทอยได้ 6","ย้ายหมากจริง 6 ช่องตามเข็มนาฬิกา แล้วตาจบโดยทันที");renderGame();await endTurn();return}
+ pl.benchAttempts++;
+ if(pl.benchAttempts>=3){await ensureFunds(pi,1);if(pl.points>0)pl.points-=1;pl.posStatus="board";pl.benchAttempts=0;await info("ครบ 3 ครั้งแล้ว",`จ่าย 1 Point และย้ายหมากจริง ${d} ช่องตามผล White Die ล่าสุด จากนั้นทำ Action ของช่องที่ตก`);renderGame();return}
+ await info("ยังออกไม่ได้",`ทอยได้ ${d} — อยู่ Bench ต่อและตาจบ`);renderGame();await endTurn()
+}
+function askWhiteDie(title,rollerName="ผู้เล่น"){
+ return new Promise(res=>{
+  $("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>${title}</h2><div class="dicePanel white"><div class="diceTitle">⚪ ${rollerName} — ทอยลูกเต๋าสีขาว</div><div class="hint">เลือกผลตามหน้าลูกเต๋าที่ออกจริง</div><div class="diceChoices">${[1,2,3,4,5,6].map(v=>`<button class="diceChoice wd" data-v="${v}">${v}</button>`).join("")}</div></div></div></div>`;
+  $$(".wd").forEach(b=>b.onclick=()=>{$("#overlay").innerHTML="";res(+b.dataset.v)})
+ })
+}
+$("#matchesBtn").onclick=()=>{checkpoint("Historic Match manager");openMatchManager()};
+function openMatchManager(){
+ let boxes=state.historic.map(h=>`<div class="setBox" style="--c:${COLORS[h.color]}"><b>${h.label}</b><div class="hint">${COLOR_LABEL[h.color]} ${h.slot}<br>Owner: ${h.owner===null?"Uncontrolled":state.players[h.owner].name}<br>Cost ${h.cost??"?"} • Bonus ${h.bonus??"?"} • End ${h.end??"?"}</div><button class="btn3 editHM" data-id="${h.id}" style="margin-top:6px">แก้ข้อมูล</button></div>`).join("");
+ $("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>Historic Matches 16 ใบ</h2><p class="hint">ข้อมูลทั้ง 16 ช่องถูกใส่จากกระดานจริงของคุณแล้ว • ปุ่ม “แก้ข้อมูล” มีไว้เฉพาะกรณีต้องการแก้ด้วยมือ</p><div class="setGrid">${boxes}</div><div class="actions"><button class="primary" id="hmClose">ปิด</button></div></div></div>`;
+ $$(".editHM").forEach(b=>b.onclick=async()=>{let h=state.historic.find(x=>x.id===+b.dataset.id);$("#overlay").innerHTML="";await configureHistoricEdit(h);openMatchManager()});$("#hmClose").onclick=()=>$("#overlay").innerHTML=""
+}
+$("#manualBtn").onclick=()=>{checkpoint("จัดการเกม");openManual()};
+function openManual(){
+ $("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>จัดการเกม</h2><div class="choices"><button class="choice man" data-x="points"><b>ปรับ Points</b><small>กรณีได้รับ/จ่ายจากการ์ดจริง</small></button><button class="choice man" data-x="active"><b>Active / Inactive</b><small>แก้สถานะนักเตะด้วยมือ</small></button><button class="choice man" data-x="trade"><b>Trade Historic Match / Points</b><small>สำหรับข้อตกลงระหว่างผู้เล่น</small></button><button class="choice man" data-x="finish"><b>คำนวณ Final Score</b><small>ใช้เมื่อกอง World Cup 26 หมด</small></button></div><div class="actions"><button id="manClose">ปิด</button></div></div></div>`;
+ $$(".man").forEach(b=>b.onclick=async()=>{let x=b.dataset.x;$("#overlay").innerHTML="";if(x==="points")await manualPoints();if(x==="active")await manualActive();if(x==="trade")await manualTrade();if(x==="finish")await finishGame()});$("#manClose").onclick=()=>$("#overlay").innerHTML=""
+}
+async function manualPoints(){checkpoint("ปรับ Points");let pi=await choose("เลือกผู้เล่น",state.players.map((pl,i)=>({value:i,html:`<b>${pl.name}</b><small>${pl.points} Points</small>`})));return new Promise(res=>{$("#overlay").innerHTML=`<div class="modalBg"><div class="modal"><h2>ปรับ Points — ${state.players[pi].name}</h2><input id="mp" type="number" value="0" placeholder="+/-"><div class="actions"><button class="primary" id="mpOk">บันทึก</button></div></div></div>`;$("#mpOk").onclick=()=>{let n=+$("#mp").value||0;state.players[pi].points=Math.max(0,state.players[pi].points+n);log(`ปรับ Points ${state.players[pi].name} ${n>=0?"+":""}${n}`);$("#overlay").innerHTML="";res()}})}
+async function manualActive(){checkpoint("Active / Inactive");let pi=await choose("เลือกผู้เล่น",state.players.map((pl,i)=>({value:i,html:`<b>${pl.name}</b>`}))),id=await choosePlayerAny(pi,"เลือกนักเตะที่จะสลับสถานะ");state.players[pi].active[id]=!state.players[pi].active[id];log(`แก้สถานะ ${byId(id).name} → ${state.players[pi].active[id]?"ACTIVE":"INACTIVE"}`)}
+async function manualTrade(){await info("Trade ระหว่างผู้เล่น","Historic Matches และ Points สามารถตกลงซื้อขาย/แลกกันได้ตลอดเวลา แต่ FIFA World Cup 26 cards ห้ามแลกกัน เว็บเวอร์ชันนี้ให้ใช้เมนูปรับ Points + Historic Match manager เพื่อบันทึกข้อตกลง")}
+async function finishGame(){
+ state.phase="ended";let rows=state.players.map((pl,i)=>{let hv=state.historic.filter(h=>h.owner===i).reduce((s,h)=>s+(h.end??0)*(completeSet(i,h.color)?2:1),0),wv=pl.wc.reduce((s,x)=>s+(x.value||0),0);return{name:pl.name,points:pl.points,hv,wv,total:pl.points+hv+wv}}).sort((a,b)=>b.total-a.total);
+ await modal("Final Score 🏆",`<table class="table"><tr><th>ผู้เล่น</th><th>Chips</th><th>Historic</th><th>WC26</th><th>Total</th></tr>${rows.map(r=>`<tr><td><b>${r.name}</b></td><td>${r.points}</td><td>${r.hv}</td><td>${r.wv}</td><td><b>${r.total}</b></td></tr>`).join("")}</table><div class="notice"><b>${rows[0].name}</b> มีคะแนนสูงสุด${rows.length>1&&rows[0].total===rows[1].total?" — ถ้าเสมอให้ผู้เล่นที่เสมอทอย White Die จริงตัดสิน":""}</div>`);save()
+}
+</script>
+</body>
+</html>
